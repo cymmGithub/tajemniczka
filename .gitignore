@@ -10,3 +10,5 @@ dist/
 coverage/
 .turbo/
 scripts/members.json
+.playwright-mcp/
+*-fullpage.png

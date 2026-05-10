@@ -12,7 +12,7 @@ function init(): DB {
   return drizzle(postgres(url, { prepare: false }), { schema });
 }
 
-// Lazy proxy — DATABASE_URL is only required at request time, not at
+// Lazy proxy — DATABASE_URL is only required at first query, not at
 // module load (which happens during `next build` for static analysis).
 export const db = new Proxy({} as DB, {
   get(_t, prop) {

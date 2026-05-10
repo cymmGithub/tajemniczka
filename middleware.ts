@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 const COOKIE_NAME = "tajemniczka_session";
 const PUBLIC_PATHS = [
   "/login",
+  "/demo",
   "/api/twilio/webhook",
   "/api/cron/send",
   "/api/cron/evaluate",
