@@ -1,15 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Infant:ital,wght@0,400;0,600;1,400&display=swap");
+
 @import "tailwindcss";
 
+@theme {
+  --color-paper: #faf6ec;
+  --color-paper-deep: #f1ead7;
+  --color-paper-shadow: #e7dec5;
+  --color-ink: #1a1410;
+  --color-ink-soft: #4a3f33;
+  --color-ink-faded: #7a6f5e;
+
+  --color-marian: #1e3a5f;
+  --color-rubric: #9b1f1f;
+  --color-gold: #a78535;
+  --color-violet: #5b3e7e;
+
+  --font-display: "Cormorant Garamond", "Cormorant Infant", "EB Garamond", Georgia, serif;
+  --font-body: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+}
+
 :root {
-  font-size: 16px;
+  /* Base size bumped from 16 → 18 for older readers. Tailwind utilities
+     scale automatically since they use rem. */
+  font-size: 18px;
+  line-height: 1.55;
 }
 
 @media (min-width: 1024px) {
   :root {
-    font-size: 17px;
+    font-size: 19px;
   }
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background-color: var(--color-paper);
 }
 
 body {
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga", "calt", "kern", "onum";
+  /* Subtle parchment texture — barely visible, gives the paper its life */
+  background-image:
+    radial-gradient(at 20% 10%, rgba(166, 134, 53, 0.04) 0%, transparent 50%),
+    radial-gradient(at 80% 80%, rgba(155, 31, 31, 0.03) 0%, transparent 50%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-attachment: fixed;
+}
+
+/* Display headings — big editorial serif with slight tracking */
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+.italic-display {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Small caps label — for "EKRAN:", "Slot", section headers, etc. */
+.eyebrow {
+  font-family: var(--font-display);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  font-size: 0.78em;
+  color: var(--color-ink-faded);
+}
+
+/* Rubric — small caps in liturgical red, used like a label/marginalia */
+.rubric {
+  font-family: var(--font-display);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  color: var(--color-rubric);
+}
+
+/* Decorative fleuron divider — drawn via pseudo-elements */
+.fleuron {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink-faded);
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+.fleuron::before,
+.fleuron::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-paper-shadow) 30%,
+    var(--color-paper-shadow) 70%,
+    transparent
+  );
+}
+
+/* Tajemnica badge — colored per group, looks like a wax seal */
+.tajemnica {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-feature-settings: "lnum";
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+}
+
+.tajemnica .group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  height: 1.6em;
+  padding: 0 0.4em;
+  border-radius: 0.25em;
+  font-size: 0.86em;
+  font-weight: 700;
+  color: var(--color-paper);
+  letter-spacing: 0;
+}
+
+.tajemnica .group[data-group="Ś"]  { background: var(--color-gold); }
+.tajemnica .group[data-group="B"]  { background: var(--color-rubric); }
+.tajemnica .group[data-group="CH"] { background: var(--color-violet); }
+.tajemnica .group[data-group="R"]  { background: var(--color-marian); }
+
+.tajemnica .roman {
+  font-weight: 500;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Manuscript border for cards — gentle paper feel without skeuomorphism */
+.card-paper {
+  background: var(--color-paper);
+  border: 1px solid var(--color-paper-shadow);
+  border-radius: 2px;
+  box-shadow: 0 1px 0 var(--color-paper-shadow);
+}
+
+/* Vacant slot — uses italic with subtle ornament */
+.vacant {
+  font-style: italic;
+  color: var(--color-ink-faded);
+}
+
+/* Quiet bottom rule for section headers — single hairline, not ornate */
+.heading-rule {
+  border-bottom: 1px solid var(--color-paper-shadow);
+  padding-bottom: 0.5rem;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--color-rubric);
 }

@@ -12,3 +12,5 @@ coverage/
 scripts/members.json
 .playwright-mcp/
 *-fullpage.png
+redesign-*.png
+demo-*.png
