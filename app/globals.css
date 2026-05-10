@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  font-size: 16px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    font-size: 17px;
+  }
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
