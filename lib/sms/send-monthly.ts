@@ -50,44 +50,63 @@ export async function runMonthlySend(
     })
     .returning({ id: sendRuns.id });
 
-  const tw = twilioClient();
-  for (const m of memberRows) {
-    const body = formatSmsBody(m.slot, targetYear, targetMonth);
-    const [resultRow] = await db
-      .insert(sendResults)
-      .values({
-        runId: run.id,
-        slot: m.slot,
-        memberName: m.name,
-        phoneE164: m.phoneE164,
-        messageBody: body,
-        status: "queued",
-      })
-      .returning({ id: sendResults.id });
-    try {
-      const msg = await tw.messages.create({
-        to: m.phoneE164,
-        from: fromNumber(),
-        body,
-        statusCallback: statusCallbackUrl(),
-      });
-      await db
-        .update(sendResults)
-        .set({ twilioSid: msg.sid, status: "sent", updatedAt: new Date() })
-        .where(eq(sendResults.id, resultRow.id));
-    } catch (e: unknown) {
-      const err = e as { code?: string | number; message?: string };
-      await db
-        .update(sendResults)
-        .set({
-          status: "failed",
-          errorCode: err.code != null ? String(err.code) : null,
-          errorMessage: err.message ?? "unknown",
-          updatedAt: new Date(),
-        })
-        .where(eq(sendResults.id, resultRow.id));
-    }
+  if (memberRows.length === 0) {
+    return { runId: run.id, pausedSkipped: false };
   }
+
+  // Bulk-insert all "queued" rows in a single round-trip, then dispatch
+  // Twilio calls in parallel. Twilio's messages.create() returns once the
+  // message is queued on their side (~200-500ms each), so 20 parallel calls
+  // complete in well under 1s wall-clock — fits the 10s Hobby function limit.
+  const queuedRows = memberRows.map((m) => ({
+    runId: run.id,
+    slot: m.slot,
+    memberName: m.name,
+    phoneE164: m.phoneE164,
+    messageBody: formatSmsBody(m.slot, targetYear, targetMonth),
+    status: "queued" as const,
+  }));
+
+  const inserted = await db
+    .insert(sendResults)
+    .values(queuedRows)
+    .returning({ id: sendResults.id, slot: sendResults.slot });
+
+  const idBySlot = new Map(inserted.map((r) => [r.slot, r.id]));
+  const tw = twilioClient();
+  const from = fromNumber();
+  const statusCb = statusCallbackUrl();
+
+  await Promise.allSettled(
+    memberRows.map(async (m) => {
+      const resultId = idBySlot.get(m.slot);
+      if (resultId == null) return;
+      const body = formatSmsBody(m.slot, targetYear, targetMonth);
+      try {
+        const msg = await tw.messages.create({
+          to: m.phoneE164,
+          from,
+          body,
+          statusCallback: statusCb,
+        });
+        await db
+          .update(sendResults)
+          .set({ twilioSid: msg.sid, status: "sent", updatedAt: new Date() })
+          .where(eq(sendResults.id, resultId));
+      } catch (e: unknown) {
+        const err = e as { code?: string | number; message?: string };
+        await db
+          .update(sendResults)
+          .set({
+            status: "failed",
+            errorCode: err.code != null ? String(err.code) : null,
+            errorMessage: err.message ?? "unknown",
+            updatedAt: new Date(),
+          })
+          .where(eq(sendResults.id, resultId));
+      }
+    }),
+  );
 
   return { runId: run.id, pausedSkipped: false };
 }
