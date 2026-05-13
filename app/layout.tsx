@@ -23,7 +23,7 @@ export default async function RootLayout({
         <Masthead />
         {authed && (
           <nav className="border-y border-[--color-paper-shadow] bg-[--color-paper-deep]/40">
-            <ul className="flex items-center justify-center gap-5 max-w-xl mx-auto py-3 text-[0.95rem]">
+            <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 max-w-xl mx-auto px-3 py-3 text-[0.95rem]">
               <li>
                 <Link href="/" className="eyebrow hover:text-[--color-ink]">
                   {T.nav.tablica}
@@ -44,7 +44,7 @@ export default async function RootLayout({
                   {T.nav.ustawienia}
                 </Link>
               </li>
-              <li className="border-l border-[--color-paper-shadow] pl-5 ml-1">
+              <li className="sm:border-l sm:border-[--color-paper-shadow] sm:pl-5 sm:ml-1">
                 <form action="/logout" method="post">
                   <button type="submit" className="eyebrow hover:text-[--color-rubric]">
                     {T.nav.logout}
