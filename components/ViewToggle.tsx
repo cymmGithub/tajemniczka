@@ -11,9 +11,9 @@ export function ViewToggle({
 }) {
   const monthHref = `/?view=month&y=${year}&m=${month}`;
   const yearHref = `/?view=year&y=${year}&m=${month}`;
-  const active = "rubric underline underline-offset-4 px-3 py-2";
-  const inactive =
-    "eyebrow hover:text-[--color-ink] px-3 py-2";
+  const base = "eyebrow px-3 py-2";
+  const active = `${base} text-[--color-rubric] underline underline-offset-4`;
+  const inactive = `${base} hover:text-[--color-ink]`;
   return (
     <div className="flex justify-center gap-2 py-3 max-w-xl mx-auto border-b border-[--color-paper-shadow]">
       <Link href={monthHref} className={view === "month" ? active : inactive}>

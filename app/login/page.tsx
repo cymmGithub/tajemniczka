@@ -13,7 +13,6 @@ export default function LoginPage() {
       <div className="card-paper max-w-sm mx-auto p-7">
         <div className="text-center mb-5">
           <div className="eyebrow">Wejście</div>
-          <h2 className="display text-2xl mt-1">{T.login.title}</h2>
         </div>
         <form action={action} className="space-y-4">
           <label className="block">

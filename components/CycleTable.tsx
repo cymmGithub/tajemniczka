@@ -24,7 +24,7 @@ export function CycleTable({
 
   return (
     <div className="cycle-wrapper">
-      <div className="overflow-x-auto pb-2 px-5">
+      <div className="overflow-x-auto pb-2">
         <table className="cycle-table">
           <thead>
             <tr>
