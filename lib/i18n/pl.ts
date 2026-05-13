@@ -7,6 +7,11 @@ export const MONTHS_PL_TITLE = MONTHS_PL.map(
   (m) => m.charAt(0).toUpperCase() + m.slice(1),
 );
 
+export const MONTHS_PL_SHORT = [
+  "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze",
+  "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru",
+] as const;
+
 export const TAJEMNICE_LONG: Record<"Ś" | "B" | "CH" | "R", string> = {
   "Ś":  "Światła",
   "B":  "Bolesna",
