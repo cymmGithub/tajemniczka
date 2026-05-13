@@ -23,31 +23,53 @@ export default async function SettingsPage() {
   }
 
   return (
-    <main className="p-4 max-w-xl mx-auto space-y-8">
-      <h1 className="text-2xl font-semibold">{T.settings.title}</h1>
+    <main className="px-5 py-6 max-w-xl mx-auto space-y-7">
+      <h2 className="display text-3xl heading-rule">{T.settings.title}</h2>
 
-      <section className="space-y-2">
-        <form action={togglePause}>
-          <button
-            className={`w-full rounded p-3 text-white ${paused ? "bg-amber-600" : "bg-slate-900"}`}
-          >
-            {T.settings.pauseLabel} {paused ? "✓ włączona" : "wyłączona"}
-          </button>
-        </form>
-        <p className="text-sm text-slate-600">{T.settings.pauseHelp}</p>
+      <section>
+        <div className="eyebrow mb-2">Wysyłka</div>
+        <div className="card-paper p-4 space-y-3">
+          <form action={togglePause}>
+            <button
+              type="submit"
+              className="w-full text-left flex items-center justify-between gap-3"
+            >
+              <span className="display text-lg">{T.settings.pauseLabel}</span>
+              <span
+                className={
+                  paused
+                    ? "rubric text-sm"
+                    : "font-[--font-display] uppercase tracking-[0.12em] text-sm text-[--color-ink-faded]"
+                }
+              >
+                {paused ? "✓ włączona" : "wyłączona"}
+              </span>
+            </button>
+          </form>
+          <p className="text-sm text-[--color-ink-soft] italic">
+            {T.settings.pauseHelp}
+          </p>
+        </div>
       </section>
 
       <section>
+        <div className="eyebrow mb-2">Test</div>
         <form action={test}>
-          <button className="w-full rounded bg-blue-700 text-white p-3">
+          <button
+            type="submit"
+            className="w-full p-3 text-lg bg-[--color-marian] text-[--color-paper] font-[--font-display] tracking-wide"
+          >
             {T.settings.sendTest}
           </button>
         </form>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-lg font-semibold">{T.settings.changePassword}</h2>
-        <ChangePasswordForm />
+      <section>
+        <div className="eyebrow mb-2">Bezpieczeństwo</div>
+        <div className="card-paper p-4 space-y-3">
+          <h3 className="display text-lg">{T.settings.changePassword}</h3>
+          <ChangePasswordForm />
+        </div>
       </section>
     </main>
   );

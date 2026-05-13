@@ -4,7 +4,8 @@ import { desc } from "drizzle-orm";
 import { assignment } from "@/lib/rotation/algorithm";
 import { MonthSwitcher } from "@/components/MonthSwitcher";
 import { PhoneToggle } from "@/components/PhoneToggle";
-import { T } from "@/lib/i18n/pl";
+import { Tajemnica } from "@/components/Tajemnica";
+import { T, MONTHS_PL_TITLE } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
 
@@ -24,19 +25,27 @@ export default async function HomePage(props: {
   )[0];
 
   return (
-    <main className="p-4 max-w-xl mx-auto">
+    <main className="px-5 py-6 max-w-xl mx-auto">
+      <h2 className="display text-3xl text-center heading-rule mb-5 italic">
+        {MONTHS_PL_TITLE[month - 1]}{" "}
+        <span className="text-[--color-ink-faded]">{year}</span>
+      </h2>
+
       <MonthSwitcher year={year} month={month} />
-      <ol className="divide-y divide-slate-200 rounded border border-slate-200 bg-white">
+
+      <ol className="card-paper divide-y divide-[--color-paper-shadow]">
         {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
           const tj = assignment(slot, year, month);
           const m = bySlot.get(slot);
           return (
-            <li key={slot} className="flex items-center gap-3 p-3 text-base">
-              <span className="font-mono w-8 text-slate-500">{slot}</span>
-              <span className="flex-1">
-                {m ? m.name : <em className="text-slate-400">{T.vacant}</em>}
+            <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
+              <span className="font-[--font-display] text-base text-[--color-ink-faded] w-7 tabular-nums">
+                {slot}.
               </span>
-              <span className="font-semibold tabular-nums">{tj.short}</span>
+              <span className="flex-1 text-lg leading-snug">
+                {m ? m.name : <span className="vacant">— {T.vacant} —</span>}
+              </span>
+              <Tajemnica roman={tj.roman} group={tj.group} />
             </li>
           );
         })}
@@ -51,18 +60,23 @@ export default async function HomePage(props: {
       />
 
       {lastRun && (
-        <p className="text-sm text-slate-600 mt-4">
-          Ostatnia wysyłka:{" "}
+        <div className="mt-5 flex items-center justify-between text-sm text-[--color-ink-faded]">
+          <span className="italic">
+            Ostatnia wysyłka:{" "}
+            {new Date(lastRun.firedAt).toLocaleDateString("pl-PL")}
+          </span>
           <span
             className={
-              lastRun.status === "success" ? "text-green-700" : "text-red-700"
+              lastRun.status === "success"
+                ? "font-[--font-display] uppercase tracking-[0.12em] text-[--color-marian]"
+                : "rubric"
             }
           >
-            {T.history.statuses[lastRun.status as keyof typeof T.history.statuses] ??
-              lastRun.status}
-          </span>{" "}
-          ({new Date(lastRun.firedAt).toLocaleDateString("pl-PL")})
-        </p>
+            {T.history.statuses[
+              lastRun.status as keyof typeof T.history.statuses
+            ] ?? lastRun.status}
+          </span>
+        </div>
       )}
     </main>
   );

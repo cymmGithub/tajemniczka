@@ -1,10 +1,16 @@
 "use client";
 
 import { useActionState } from "react";
-import { changePassword, type ChangePasswordResult } from "@/app/ustawienia/actions";
+import {
+  changePassword,
+  type ChangePasswordResult,
+} from "@/app/ustawienia/actions";
 import { T } from "@/lib/i18n/pl";
 
 const initial: ChangePasswordResult = {};
+
+const inputClass =
+  "block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-base";
 
 export function ChangePasswordForm() {
   const [state, action, pending] = useActionState<ChangePasswordResult, FormData>(
@@ -25,30 +31,32 @@ export function ChangePasswordForm() {
         name="current"
         type="password"
         placeholder={T.settings.currentPassword}
-        className="block w-full rounded border border-slate-300 p-3"
         required
+        className={inputClass}
       />
       <input
         name="next"
         type="password"
         placeholder={T.settings.newPassword}
-        className="block w-full rounded border border-slate-300 p-3"
         required
+        className={inputClass}
       />
       <input
         name="confirm"
         type="password"
         placeholder={T.settings.confirmPassword}
-        className="block w-full rounded border border-slate-300 p-3"
         required
+        className={inputClass}
       />
-      {errMsg && <p className="text-sm text-red-600">{errMsg}</p>}
+      {errMsg && <p className="rubric text-sm">{errMsg}</p>}
       {!state.error && state !== initial && (
-        <p className="text-sm text-green-700">{T.settings.passwordChanged}</p>
+        <p className="font-[--font-display] uppercase tracking-[0.12em] text-sm text-[--color-marian]">
+          {T.settings.passwordChanged}
+        </p>
       )}
       <button
         disabled={pending}
-        className="w-full rounded bg-slate-900 text-white p-3 disabled:opacity-50"
+        className="w-full p-3 text-base bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide disabled:opacity-50"
       >
         {T.settings.changePassword}
       </button>
