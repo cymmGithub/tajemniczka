@@ -141,6 +141,26 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.tajemnica-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.8em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.25em;
+  font-family: var(--font-display);
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--color-paper);
+  letter-spacing: 0;
+  line-height: 1;
+  font-feature-settings: "lnum";
+}
+.tajemnica-chip[data-group="Ś"]  { background: var(--color-gold); }
+.tajemnica-chip[data-group="B"]  { background: var(--color-rubric); }
+.tajemnica-chip[data-group="CH"] { background: var(--color-violet); }
+.tajemnica-chip[data-group="R"]  { background: var(--color-marian); }
+
 /* Manuscript border for cards — gentle paper feel without skeuomorphism */
 .card-paper {
   background: var(--color-paper);
