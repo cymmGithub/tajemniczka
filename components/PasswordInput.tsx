@@ -12,16 +12,15 @@ export function PasswordInput({
     <div className="relative">
       <input
         type={visible ? "text" : "password"}
-        className={`${className} pr-11`}
+        className={`${className} pr-12`}
         {...rest}
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faded hover:text-ink p-1 transition-colors cursor-pointer"
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-faded hover:text-ink p-2 transition-colors cursor-pointer"
         aria-label={visible ? "Ukryj hasło" : "Pokaż hasło"}
         aria-pressed={visible}
-        tabIndex={-1}
       >
         {visible ? <EyeOff /> : <Eye />}
       </button>

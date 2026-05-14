@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { isAuthenticated } from "@/lib/auth/session";
 import { Masthead } from "@/components/Masthead";
+import { LogoutButton } from "@/components/LogoutButton";
 import { T } from "@/lib/i18n/pl";
 
 export const metadata: Metadata = {
@@ -20,36 +21,32 @@ export default async function RootLayout({
   return (
     <html lang="pl">
       <body className="min-h-screen flex flex-col">
-        <Masthead />
+        <div className="relative">
+          <Masthead />
+          {authed && <LogoutButton />}
+        </div>
         {authed && (
           <nav className="border-y border-paper-shadow bg-paper-deep/40">
-            <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 max-w-xl mx-auto px-3 py-3 text-[0.95rem]">
+            <ul className="flex flex-wrap items-center justify-center gap-x-1 gap-y-0 max-w-xl mx-auto px-2 py-2 text-[0.82rem]">
               <li>
-                <Link href="/" className="eyebrow hover:text-ink">
+                <Link href="/" className="eyebrow hover:text-ink block px-2 py-2">
                   {T.nav.tablica}
                 </Link>
               </li>
               <li>
-                <Link href="/czlonkowie" className="eyebrow hover:text-ink">
+                <Link href="/czlonkowie" className="eyebrow hover:text-ink block px-2 py-2">
                   {T.nav.czlonkowie}
                 </Link>
               </li>
               <li>
-                <Link href="/historia" className="eyebrow hover:text-ink">
+                <Link href="/historia" className="eyebrow hover:text-ink block px-2 py-2">
                   {T.nav.historia}
                 </Link>
               </li>
               <li>
-                <Link href="/ustawienia" className="eyebrow hover:text-ink">
+                <Link href="/ustawienia" className="eyebrow hover:text-ink block px-2 py-2">
                   {T.nav.ustawienia}
                 </Link>
-              </li>
-              <li className="sm:border-l sm:border-paper-shadow sm:pl-5 sm:ml-1">
-                <form action="/logout" method="post">
-                  <button type="submit" className="eyebrow hover:text-rubric">
-                    {T.nav.logout}
-                  </button>
-                </form>
               </li>
             </ul>
           </nav>

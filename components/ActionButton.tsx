@@ -23,7 +23,7 @@ export function ActionButton({
       aria-busy={pending}
       {...rest}
     >
-      <span className={pending ? "invisible" : ""}>{children}</span>
+      <span className={`contents ${pending ? "invisible" : ""}`}>{children}</span>
       {pending && (
         <span className="absolute inset-0 flex items-center justify-center">
           <span className="btn-spinner" aria-label={loadingLabel ?? "Ładowanie"} />

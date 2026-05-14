@@ -34,20 +34,20 @@ export function CycleSwitcher({
       </p>
       <nav className="flex items-center justify-between text-base mb-4 px-1">
         {prevIsBeforeAnchor ? (
-          <span className="italic text-paper-shadow py-2 pr-3 cursor-not-allowed">
+          <span className="italic text-paper-shadow py-2 pr-3 cursor-not-allowed whitespace-nowrap">
             ‹ Poprzedni cykl
           </span>
         ) : (
           <Link
             href={`/?view=year&y=${prev.year}&m=${prev.month}`}
-            className="italic text-ink-soft hover:text-ink py-2 pr-3"
+            className="italic text-ink-soft hover:text-ink py-2 pr-3 whitespace-nowrap"
           >
             ‹ Poprzedni cykl
           </Link>
         )}
         <Link
           href={`/?view=year&y=${next.year}&m=${next.month}`}
-          className="italic text-ink-soft hover:text-ink py-2 pl-3"
+          className="italic text-ink-soft hover:text-ink py-2 pl-3 whitespace-nowrap"
         >
           Następny cykl ›
         </Link>
