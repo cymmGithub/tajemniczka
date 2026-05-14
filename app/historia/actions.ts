@@ -4,11 +4,7 @@ import { db } from "@/lib/db/client";
 import { sendResults } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import {
-  twilioClient,
-  fromNumber,
-  statusCallbackUrl,
-} from "@/lib/sms/twilio-client";
+import { sendOne } from "@/lib/sms/smsapi-client";
 
 export async function retrySend(resultId: number): Promise<void> {
   const r = (
@@ -19,30 +15,25 @@ export async function retrySend(resultId: number): Promise<void> {
       .limit(1)
   )[0];
   if (!r) return;
-  try {
-    const msg = await twilioClient().messages.create({
-      to: r.phoneE164,
-      from: fromNumber(),
-      body: r.messageBody,
-      statusCallback: statusCallbackUrl(),
-    });
+  const result = await sendOne(r.phoneE164, r.messageBody);
+  if (result.ok) {
     await db
       .update(sendResults)
       .set({
-        twilioSid: msg.sid,
-        status: "sent",
+        providerMessageId: result.providerMessageId,
+        status: result.status,
         errorCode: null,
         errorMessage: null,
         updatedAt: new Date(),
       })
       .where(eq(sendResults.id, resultId));
-  } catch (e: unknown) {
-    const err = e as { message?: string };
+  } else {
     await db
       .update(sendResults)
       .set({
         status: "failed",
-        errorMessage: err.message ?? "unknown",
+        errorCode: result.errorCode,
+        errorMessage: result.errorMessage,
         updatedAt: new Date(),
       })
       .where(eq(sendResults.id, resultId));

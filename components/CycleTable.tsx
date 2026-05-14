@@ -36,7 +36,7 @@ export function CycleTable({
                   title={`${MONTHS_PL_SHORT[m.month - 1]} ${m.year}`}
                 >
                   <div>{MONTHS_PL_SHORT[m.month - 1]}</div>
-                  <div className="text-[0.7em] text-[--color-ink-faded] mt-0.5">
+                  <div className="text-[0.7em] text-ink-faded mt-0.5">
                     '{String(m.year).slice(-2)}
                   </div>
                 </th>

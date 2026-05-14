@@ -42,7 +42,7 @@ function Masthead() {
   return (
     <header className="pt-7 pb-4 text-center">
       <div className="eyebrow mb-1">Kółko Różańcowe</div>
-      <h1 className="display text-4xl text-[--color-ink] leading-none">Tajemniczka</h1>
+      <h1 className="display text-4xl text-ink leading-none">Tajemniczka</h1>
       <div className="fleuron mt-3 mx-auto max-w-[16rem] text-sm">
         <span>✦</span>
       </div>
@@ -52,7 +52,7 @@ function Masthead() {
 
 function NavBar() {
   return (
-    <nav className="border-y border-[--color-paper-shadow] bg-[--color-paper-deep]/40">
+    <nav className="border-y border-paper-shadow bg-paper-deep/40">
       <ul className="flex items-center justify-center gap-6 max-w-xl mx-auto py-3 text-[0.95rem]">
         <li><Link href="#tablica" className="rubric">Tablica</Link></li>
         <li><Link href="#czlonkowie" className="eyebrow">Członkowie</Link></li>
@@ -85,13 +85,13 @@ function LoginScreen() {
           <span className="eyebrow">{T.login.passwordLabel}</span>
           <input
             type="password"
-            className="mt-2 block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-lg font-[--font-body]"
+            className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg font-body"
             readOnly
           />
         </label>
         <button
           type="button"
-          className="mt-5 w-full p-3 text-lg bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide"
+          className="mt-5 w-full p-3 text-lg bg-ink text-paper font-display tracking-wide"
         >
           {T.login.submit}
         </button>
@@ -104,25 +104,25 @@ function Tablica() {
   return (
     <main className="px-5 py-6 max-w-xl mx-auto">
       <h2 className="display text-3xl text-center heading-rule mb-5 italic">
-        {MONTHS_PL_TITLE[MONTH - 1]} <span className="text-[--color-ink-faded]">{YEAR}</span>
+        {MONTHS_PL_TITLE[MONTH - 1]} <span className="text-ink-faded">{YEAR}</span>
       </h2>
       <nav className="flex items-center justify-between text-base mb-5 px-1">
-        <span className="italic text-[--color-ink-soft]">
+        <span className="italic text-ink-soft">
           ‹ {MONTHS_PL_TITLE[MONTH - 2]}
         </span>
         <span className="rubric">Bieżący miesiąc</span>
-        <span className="italic text-[--color-ink-soft]">
+        <span className="italic text-ink-soft">
           {MONTHS_PL_TITLE[MONTH]} ›
         </span>
       </nav>
 
-      <ol className="card-paper divide-y divide-[--color-paper-shadow]">
+      <ol className="card-paper divide-y divide-paper-shadow">
         {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
           const tj = assignment(slot, YEAR, MONTH);
           const m = DEMO_MEMBERS.find((d) => d.slot === slot);
           return (
             <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
-              <span className="font-[--font-display] text-base text-[--color-ink-faded] w-7 tabular-nums">
+              <span className="font-display text-base text-ink-faded w-7 tabular-nums">
                 {slot}.
               </span>
               <span className="flex-1 text-lg leading-snug">
@@ -138,12 +138,12 @@ function Tablica() {
         })}
       </ol>
 
-      <div className="mt-5 flex items-center justify-between text-sm text-[--color-ink-faded]">
+      <div className="mt-5 flex items-center justify-between text-sm text-ink-faded">
         <span className="italic">Ostatnia wysyłka: 30 kwietnia 2026</span>
         <span className="rubric">Sukces</span>
       </div>
 
-      <button className="mt-4 text-sm rubric underline underline-offset-4">
+      <button className="mt-4 text-sm rubric underline underline-offset-4 btn-link">
         Pokaż numery telefonów
       </button>
     </main>
@@ -154,18 +154,18 @@ function Czlonkowie() {
   return (
     <main className="px-5 py-6 max-w-xl mx-auto">
       <h2 className="display text-3xl heading-rule mb-5">Członkowie</h2>
-      <ul className="card-paper divide-y divide-[--color-paper-shadow]">
+      <ul className="card-paper divide-y divide-paper-shadow">
         {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
           const m = DEMO_MEMBERS.find((d) => d.slot === slot);
           return (
             <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
-              <span className="font-[--font-display] text-base text-[--color-ink-faded] w-7 tabular-nums">
+              <span className="font-display text-base text-ink-faded w-7 tabular-nums">
                 {slot}.
               </span>
               <span className="flex-1 text-lg">
                 {m?.name ?? <span className="vacant">— miejsce wolne —</span>}
               </span>
-              <span className="rubric text-sm underline underline-offset-4">
+              <span className="rubric text-sm underline underline-offset-4 btn-link">
                 {m?.name ? "Edytuj" : "Dodaj"}
               </span>
             </li>
@@ -180,13 +180,13 @@ function Historia() {
   return (
     <main className="px-5 py-6 max-w-xl mx-auto">
       <h2 className="display text-3xl heading-rule mb-5">Historia</h2>
-      <ul className="card-paper divide-y divide-[--color-paper-shadow]">
+      <ul className="card-paper divide-y divide-paper-shadow">
         <li className="flex items-baseline gap-4 px-4 py-4">
           <div className="flex-1">
             <div className="display text-xl italic">Czerwiec 2026</div>
-            <div className="text-sm text-[--color-ink-soft] mt-1">
+            <div className="text-sm text-ink-soft mt-1">
               <span className="rubric">Sukces</span>
-              <span className="text-[--color-ink-faded]"> · Wysłano 19 z 19</span>
+              <span className="text-ink-faded"> · Wysłano 19 z 19</span>
             </div>
           </div>
           <span className="text-sm underline underline-offset-4">Szczegóły</span>
@@ -196,8 +196,8 @@ function Historia() {
             <div className="display text-xl italic">Maj 2026</div>
             <div className="text-sm mt-1">
               <span className="rubric">Niepowodzenie</span>
-              <span className="text-[--color-ink-faded]"> · Wysłano 18 z 19</span>
-              <div className="text-[--color-ink-soft] italic mt-1 text-sm">
+              <span className="text-ink-faded"> · Wysłano 18 z 19</span>
+              <div className="text-ink-soft italic mt-1 text-sm">
                 Nie dostarczono: Woźniak Stanisław
               </div>
             </div>
@@ -207,9 +207,9 @@ function Historia() {
         <li className="flex items-baseline gap-4 px-4 py-4">
           <div className="flex-1">
             <div className="display text-xl italic">Kwiecień 2026</div>
-            <div className="text-sm text-[--color-ink-soft] mt-1">
+            <div className="text-sm text-ink-soft mt-1">
               <span className="rubric">Sukces</span>
-              <span className="text-[--color-ink-faded]"> · Wysłano 19 z 19</span>
+              <span className="text-ink-faded"> · Wysłano 19 z 19</span>
             </div>
           </div>
           <span className="text-sm underline underline-offset-4">Szczegóły</span>
@@ -234,7 +234,7 @@ function Ustawienia() {
             <span className="display text-lg">Pauza wysyłki</span>
             <span className="rubric text-sm">wyłączona</span>
           </button>
-          <p className="text-sm text-[--color-ink-soft] italic">
+          <p className="text-sm text-ink-soft italic">
             Gdy włączone, najbliższa wysyłka SMS zostanie pominięta.
           </p>
         </div>
@@ -244,7 +244,7 @@ function Ustawienia() {
         <div className="eyebrow mb-2">Test</div>
         <button
           type="button"
-          className="w-full p-3 text-lg bg-[--color-marian] text-[--color-paper] font-[--font-display] tracking-wide"
+          className="w-full p-3 text-lg bg-marian text-paper font-display tracking-wide"
         >
           Wyślij testowy SMS
         </button>
@@ -257,24 +257,24 @@ function Ustawienia() {
           <input
             type="password"
             placeholder="Obecne hasło"
-            className="block w-full bg-[--color-paper] border border-[--color-paper-shadow] p-3 text-base"
+            className="block w-full bg-paper border border-paper-shadow p-3 text-base"
             readOnly
           />
           <input
             type="password"
             placeholder="Nowe hasło"
-            className="block w-full bg-[--color-paper] border border-[--color-paper-shadow] p-3 text-base"
+            className="block w-full bg-paper border border-paper-shadow p-3 text-base"
             readOnly
           />
           <input
             type="password"
             placeholder="Potwierdź nowe hasło"
-            className="block w-full bg-[--color-paper] border border-[--color-paper-shadow] p-3 text-base"
+            className="block w-full bg-paper border border-paper-shadow p-3 text-base"
             readOnly
           />
           <button
             type="button"
-            className="w-full p-3 text-base bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide"
+            className="w-full p-3 text-base bg-ink text-paper font-display tracking-wide"
           >
             Zmień hasło
           </button>
@@ -287,7 +287,7 @@ function Ustawienia() {
 export default function DemoPage() {
   return (
     <div>
-      <div className="bg-[--color-rubric] text-[--color-paper] text-xs py-1.5 px-3 text-center font-[--font-display] tracking-wide">
+      <div className="bg-rubric text-paper text-xs py-1.5 px-3 text-center font-display tracking-wide">
         Tryb demo — dane statyczne, brak DB
       </div>
       <Masthead />
@@ -308,8 +308,8 @@ export default function DemoPage() {
       <ScreenLabel id="ustawienia" title="Ustawienia aplikacji" />
       <Ustawienia />
 
-      <footer className="mt-16 pb-8 pt-4 text-center border-t border-[--color-paper-shadow]">
-        <div className="fleuron text-xs italic max-w-[12rem] mx-auto text-[--color-ink-faded]">
+      <footer className="mt-16 pb-8 pt-4 text-center border-t border-paper-shadow">
+        <div className="fleuron text-xs italic max-w-[12rem] mx-auto text-ink-faded">
           <span>Ad Maiorem Dei Gloriam</span>
         </div>
       </footer>

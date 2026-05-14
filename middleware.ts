@@ -4,7 +4,7 @@ const COOKIE_NAME = "tajemniczka_session";
 const PUBLIC_PATHS = [
   "/login",
   "/demo",
-  "/api/twilio/webhook",
+  "/api/smsapi/webhook",
   "/api/cron/send",
   "/api/cron/evaluate",
 ];

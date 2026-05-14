@@ -35,9 +35,9 @@ export default async function EditMemberPage({
       <div>
         <div className="eyebrow">Slot</div>
         <h2 className="display text-3xl heading-rule">
-          <span className="font-[--font-display] tabular-nums">{slot}</span>
+          <span className="font-display tabular-nums">{slot}</span>
           {row?.name && (
-            <span className="text-[--color-ink-faded] italic text-2xl">
+            <span className="text-ink-faded italic text-2xl">
               {" "}
               · {row.name}
             </span>
@@ -52,7 +52,7 @@ export default async function EditMemberPage({
             name="name"
             defaultValue={row?.name ?? ""}
             required
-            className="mt-2 block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-lg"
+            className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg"
           />
         </label>
         <label className="block">
@@ -63,17 +63,17 @@ export default async function EditMemberPage({
             inputMode="tel"
             placeholder="+48 ..."
             required
-            className="mt-2 block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-lg tabular-nums"
+            className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg tabular-nums"
           />
         </label>
-        <button className="w-full p-3 text-lg bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide">
+        <button className="btn-solid w-full p-3 text-lg bg-ink text-paper">
           {T.members.save}
         </button>
       </form>
 
       {row && (
         <form action={remove} className="text-center">
-          <button className="rubric text-sm underline underline-offset-4">
+          <button className="rubric text-sm underline underline-offset-4 btn-link">
             {T.members.remove}
           </button>
         </form>

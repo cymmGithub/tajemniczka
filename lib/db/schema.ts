@@ -1,5 +1,5 @@
 import {
-  pgTable, integer, text, timestamp, boolean, serial, check,
+  pgTable, integer, text, timestamp, boolean, serial, check, index,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
@@ -34,13 +34,15 @@ export const sendResults = pgTable("send_results", {
   memberName: text("member_name").notNull(),
   phoneE164: text("phone_e164").notNull(),
   messageBody: text("message_body").notNull(),
-  twilioSid: text("twilio_sid"),
+  providerMessageId: text("provider_message_id"),
   status: text("status").notNull(),
   errorCode: text("error_code"),
   errorMessage: text("error_message"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (t) => [
+  index("send_results_provider_message_id_idx").on(t.providerMessageId),
+]);
 
 export const settings = pgTable("settings", {
   id: integer("id").primaryKey().default(1),

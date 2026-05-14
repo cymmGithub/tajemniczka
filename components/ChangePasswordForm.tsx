@@ -10,7 +10,7 @@ import { T } from "@/lib/i18n/pl";
 const initial: ChangePasswordResult = {};
 
 const inputClass =
-  "block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-base";
+  "block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-base";
 
 export function ChangePasswordForm() {
   const [state, action, pending] = useActionState<ChangePasswordResult, FormData>(
@@ -50,13 +50,13 @@ export function ChangePasswordForm() {
       />
       {errMsg && <p className="rubric text-sm">{errMsg}</p>}
       {!state.error && state !== initial && (
-        <p className="font-[--font-display] uppercase tracking-[0.12em] text-sm text-[--color-marian]">
+        <p className="font-display uppercase tracking-[0.12em] text-sm text-marian">
           {T.settings.passwordChanged}
         </p>
       )}
       <button
         disabled={pending}
-        className="w-full p-3 text-base bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide disabled:opacity-50"
+        className="btn-solid w-full p-3 text-base bg-ink text-paper disabled:opacity-50"
       >
         {T.settings.changePassword}
       </button>

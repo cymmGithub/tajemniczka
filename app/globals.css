@@ -72,6 +72,53 @@ body {
   color: var(--color-ink-faded);
 }
 
+/* Solid-fill button — Cormorant on dark fill with pure-white label.
+   Hover/active/focus states make clickability obvious. */
+.btn-solid {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    filter 120ms ease,
+    transform 80ms ease,
+    box-shadow 160ms ease;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-solid:hover:not(:disabled) {
+  filter: brightness(1.15);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.14);
+}
+
+.btn-solid:active:not(:disabled) {
+  transform: translateY(1px);
+  filter: brightness(0.95);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12) inset;
+}
+
+.btn-solid:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.btn-solid:disabled {
+  cursor: not-allowed;
+}
+
+/* Secondary/ghost buttons: underline links styled as actions. */
+.btn-link {
+  cursor: pointer;
+  transition: color 120ms ease, text-decoration-thickness 120ms ease;
+}
+
+.btn-link:hover {
+  text-decoration-thickness: 2px;
+  filter: brightness(1.1);
+}
+
 /* Rubric — small caps in liturgical red, used like a label/marginalia */
 .rubric {
   font-family: var(--font-display);

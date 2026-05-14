@@ -12,18 +12,18 @@ export function PhoneToggle({
     <div className="mt-4">
       <button
         onClick={() => setShow((v) => !v)}
-        className="text-sm rubric underline underline-offset-4"
+        className="text-sm rubric underline underline-offset-4 btn-link"
       >
         {show ? T.hidePhones : T.showPhones}
       </button>
       {show && (
-        <ul className="mt-3 card-paper divide-y divide-[--color-paper-shadow] text-sm">
+        <ul className="mt-3 card-paper divide-y divide-paper-shadow text-sm">
           {slots.map((s) => (
             <li
               key={s.slot}
               className="flex items-baseline gap-3 px-4 py-2"
             >
-              <span className="font-[--font-display] text-[--color-ink-faded] w-7 tabular-nums">
+              <span className="font-display text-ink-faded w-7 tabular-nums">
                 {s.slot}.
               </span>
               <span className="flex-1">{s.name ?? <span className="vacant">—</span>}</span>

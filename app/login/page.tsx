@@ -22,7 +22,7 @@ export default function LoginPage() {
               name="password"
               autoFocus
               required
-              className="mt-2 block w-full bg-[--color-paper] border border-[--color-paper-shadow] focus:border-[--color-marian] outline-none p-3 text-lg"
+              className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg"
             />
           </label>
           {state?.error === "invalid" && (
@@ -33,7 +33,7 @@ export default function LoginPage() {
           )}
           <button
             disabled={pending}
-            className="w-full p-3 text-lg bg-[--color-ink] text-[--color-paper] font-[--font-display] tracking-wide disabled:opacity-50"
+            className="btn-solid w-full p-3 text-lg bg-ink text-paper disabled:opacity-50"
           >
             {T.login.submit}
           </button>

@@ -48,18 +48,18 @@ export default async function HomePage(props: {
       <main className="px-5 py-6 max-w-xl mx-auto">
         <h2 className="display text-3xl text-center heading-rule mb-5 italic">
           {MONTHS_PL_TITLE[month - 1]}{" "}
-          <span className="text-[--color-ink-faded]">{year}</span>
+          <span className="text-ink-faded">{year}</span>
         </h2>
 
         <MonthSwitcher year={year} month={month} />
 
-        <ol className="card-paper divide-y divide-[--color-paper-shadow]">
+        <ol className="card-paper divide-y divide-paper-shadow">
           {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
             const tj = assignment(slot, year, month);
             const m = bySlot.get(slot);
             return (
               <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
-                <span className="font-[--font-display] text-base text-[--color-ink-faded] w-7 tabular-nums">
+                <span className="font-display text-base text-ink-faded w-7 tabular-nums">
                   {slot}.
                 </span>
                 <span className="flex-1 text-lg leading-snug">
@@ -80,7 +80,7 @@ export default async function HomePage(props: {
         />
 
         {lastRun && (
-          <div className="mt-5 flex items-center justify-between text-sm text-[--color-ink-faded]">
+          <div className="mt-5 flex items-center justify-between text-sm text-ink-faded">
             <span className="italic">
               Ostatnia wysyłka:{" "}
               {new Date(lastRun.firedAt).toLocaleDateString("pl-PL")}
@@ -88,7 +88,7 @@ export default async function HomePage(props: {
             <span
               className={
                 lastRun.status === "success"
-                  ? "font-[--font-display] uppercase tracking-[0.12em] text-[--color-marian]"
+                  ? "font-display uppercase tracking-[0.12em] text-marian"
                   : "rubric"
               }
             >

@@ -70,6 +70,8 @@ export const T = {
     pauseHelp: "Gdy włączone, najbliższa wysyłka SMS zostanie pominięta.",
     sendTest: "Wyślij testowy SMS",
     testSent: "SMS testowy wysłany.",
+    testSentTestMode: "Tryb testowy — smsapi przyjęło żądanie, ale nic nie wysłało. Ustaw SMSAPI_TEST_MODE=0 w .env, aby wysłać naprawdę.",
+    testFailed: "Nie udało się wysłać:",
     testBody: "Tajemniczka — test wysyłki. Jeśli to widzisz, wszystko działa.",
     changePassword: "Zmień hasło",
     currentPassword: "Obecne hasło",

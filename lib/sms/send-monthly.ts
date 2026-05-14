@@ -2,7 +2,7 @@ import { db } from "@/lib/db/client";
 import { members, sendRuns, sendResults, settings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { formatSmsBody } from "@/lib/rotation/format";
-import { twilioClient, fromNumber, statusCallbackUrl } from "./twilio-client";
+import { sendOne } from "./smsapi-client";
 
 export interface MonthlySendResult {
   runId: number;
@@ -55,9 +55,9 @@ export async function runMonthlySend(
   }
 
   // Bulk-insert all "queued" rows in a single round-trip, then dispatch
-  // Twilio calls in parallel. Twilio's messages.create() returns once the
-  // message is queued on their side (~200-500ms each), so 20 parallel calls
-  // complete in well under 1s wall-clock — fits the 10s Hobby function limit.
+  // smsapi calls in parallel. sendSms returns once smsapi accepts the message
+  // (~200-500ms each); 20 parallel calls complete in well under the 10s Hobby
+  // function limit. Delivery status arrives asynchronously via notify_url.
   const queuedRows = memberRows.map((m) => ({
     runId: run.id,
     slot: m.slot,
@@ -73,34 +73,30 @@ export async function runMonthlySend(
     .returning({ id: sendResults.id, slot: sendResults.slot });
 
   const idBySlot = new Map(inserted.map((r) => [r.slot, r.id]));
-  const tw = twilioClient();
-  const from = fromNumber();
-  const statusCb = statusCallbackUrl();
+  const bodyBySlot = new Map(queuedRows.map((r) => [r.slot, r.messageBody]));
 
   await Promise.allSettled(
     memberRows.map(async (m) => {
       const resultId = idBySlot.get(m.slot);
-      if (resultId == null) return;
-      const body = formatSmsBody(m.slot, targetYear, targetMonth);
-      try {
-        const msg = await tw.messages.create({
-          to: m.phoneE164,
-          from,
-          body,
-          statusCallback: statusCb,
-        });
+      const body = bodyBySlot.get(m.slot);
+      if (resultId == null || body == null) return;
+      const result = await sendOne(m.phoneE164, body);
+      if (result.ok) {
         await db
           .update(sendResults)
-          .set({ twilioSid: msg.sid, status: "sent", updatedAt: new Date() })
+          .set({
+            providerMessageId: result.providerMessageId,
+            status: result.status,
+            updatedAt: new Date(),
+          })
           .where(eq(sendResults.id, resultId));
-      } catch (e: unknown) {
-        const err = e as { code?: string | number; message?: string };
+      } else {
         await db
           .update(sendResults)
           .set({
             status: "failed",
-            errorCode: err.code != null ? String(err.code) : null,
-            errorMessage: err.message ?? "unknown",
+            errorCode: result.errorCode,
+            errorMessage: result.errorMessage,
             updatedAt: new Date(),
           })
           .where(eq(sendResults.id, resultId));

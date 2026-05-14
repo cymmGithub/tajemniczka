@@ -12,12 +12,12 @@ export default async function MembersPage() {
   return (
     <main className="px-5 py-6 max-w-xl mx-auto">
       <h2 className="display text-3xl heading-rule mb-5">{T.members.title}</h2>
-      <ul className="card-paper divide-y divide-[--color-paper-shadow]">
+      <ul className="card-paper divide-y divide-paper-shadow">
         {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
           const m = bySlot.get(slot);
           return (
             <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
-              <span className="font-[--font-display] text-base text-[--color-ink-faded] w-7 tabular-nums">
+              <span className="font-display text-base text-ink-faded w-7 tabular-nums">
                 {slot}.
               </span>
               <span className="flex-1 text-lg">
@@ -27,7 +27,7 @@ export default async function MembersPage() {
               </span>
               <Link
                 href={`/czlonkowie/${slot}`}
-                className="rubric text-sm underline underline-offset-4"
+                className="rubric text-sm underline underline-offset-4 btn-link"
               >
                 {m ? "Edytuj" : T.members.add}
               </Link>

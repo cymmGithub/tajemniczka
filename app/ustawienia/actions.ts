@@ -5,7 +5,8 @@ import { db } from "@/lib/db/client";
 import { settings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
-import { twilioClient, fromNumber } from "@/lib/sms/twilio-client";
+import { sendOne, smsTestMode } from "@/lib/sms/smsapi-client";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { T } from "@/lib/i18n/pl";
 
 export async function setPaused(paused: boolean): Promise<void> {
@@ -16,21 +17,21 @@ export async function setPaused(paused: boolean): Promise<void> {
   revalidatePath("/ustawienia");
 }
 
-export type TestSmsResult = { ok: boolean; error?: string };
-export async function sendTestSms(): Promise<TestSmsResult> {
+export type TestSmsResult =
+  | { ok: true; testMode: boolean }
+  | { ok: false; error: string };
+
+export async function sendTestSms(
+  _prev: TestSmsResult | null,
+  _form: FormData,
+): Promise<TestSmsResult> {
   const dad = process.env.DAD_PHONE_NUMBER;
-  if (!dad) return { ok: false, error: "DAD_PHONE_NUMBER not set" };
-  try {
-    await twilioClient().messages.create({
-      to: dad,
-      from: fromNumber(),
-      body: T.settings.testBody,
-    });
-    return { ok: true };
-  } catch (e: unknown) {
-    const err = e as { message?: string };
-    return { ok: false, error: err.message ?? "unknown" };
+  if (!dad || !parsePhoneNumberFromString(dad)?.isValid()) {
+    return { ok: false, error: "DAD_PHONE_NUMBER not set or invalid" };
   }
+  const result = await sendOne(dad, T.settings.testBody);
+  if (result.ok) return { ok: true, testMode: smsTestMode() };
+  return { ok: false, error: result.errorMessage };
 }
 
 export type ChangePasswordResult = {

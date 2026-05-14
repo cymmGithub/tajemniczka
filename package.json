@@ -11,9 +11,9 @@
     "test:run": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:migrate": "tsx scripts/migrate.ts",
-    "seed": "tsx scripts/seed-members.ts",
-    "set-password": "tsx scripts/set-password.ts"
+    "db:migrate": "bun run scripts/migrate.ts",
+    "seed": "bun run scripts/seed-members.ts",
+    "set-password": "bun run scripts/set-password.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -26,7 +26,7 @@
     "postgres": "^3.4.9",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "twilio": "^6.0.2"
+    "smsapi": "^2.1.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.0",
@@ -40,7 +40,6 @@
     "eslint-config-next": "^16.2.6",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.3.0",
-    "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   }

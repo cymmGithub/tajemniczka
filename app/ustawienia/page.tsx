@@ -1,8 +1,9 @@
 import { db } from "@/lib/db/client";
 import { settings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { setPaused, sendTestSms } from "./actions";
+import { setPaused } from "./actions";
 import { ChangePasswordForm } from "@/components/ChangePasswordForm";
+import { TestSmsButton } from "@/components/TestSmsButton";
 import { T } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
@@ -17,11 +18,6 @@ export default async function SettingsPage() {
     "use server";
     await setPaused(!paused);
   }
-  async function test() {
-    "use server";
-    await sendTestSms();
-  }
-
   return (
     <main className="px-5 py-6 max-w-xl mx-auto space-y-7">
       <h2 className="display text-3xl heading-rule">{T.settings.title}</h2>
@@ -39,14 +35,14 @@ export default async function SettingsPage() {
                 className={
                   paused
                     ? "rubric text-sm"
-                    : "font-[--font-display] uppercase tracking-[0.12em] text-sm text-[--color-ink-faded]"
+                    : "font-display uppercase tracking-[0.12em] text-sm text-ink-faded"
                 }
               >
                 {paused ? "✓ włączona" : "wyłączona"}
               </span>
             </button>
           </form>
-          <p className="text-sm text-[--color-ink-soft] italic">
+          <p className="text-sm text-ink-soft italic">
             {T.settings.pauseHelp}
           </p>
         </div>
@@ -54,14 +50,7 @@ export default async function SettingsPage() {
 
       <section>
         <div className="eyebrow mb-2">Test</div>
-        <form action={test}>
-          <button
-            type="submit"
-            className="w-full p-3 text-lg bg-[--color-marian] text-[--color-paper] font-[--font-display] tracking-wide"
-          >
-            {T.settings.sendTest}
-          </button>
-        </form>
+        <TestSmsButton />
       </section>
 
       <section>

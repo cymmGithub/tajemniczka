@@ -18,9 +18,9 @@ export default async function HistoryPage() {
       <h2 className="display text-3xl heading-rule mb-5">{T.history.title}</h2>
 
       {runs.length === 0 ? (
-        <p className="italic text-[--color-ink-faded]">{T.history.noRuns}</p>
+        <p className="italic text-ink-faded">{T.history.noRuns}</p>
       ) : (
-        <ul className="card-paper divide-y divide-[--color-paper-shadow]">
+        <ul className="card-paper divide-y divide-paper-shadow">
           {runs.map((r) => {
             const isFail = r.status !== "success";
             return (
@@ -31,7 +31,7 @@ export default async function HistoryPage() {
                 <div className="flex-1">
                   <div className="display text-xl italic">
                     {MONTHS_PL_TITLE[r.targetMonth - 1]}{" "}
-                    <span className="text-[--color-ink-faded] not-italic">
+                    <span className="text-ink-faded not-italic">
                       {r.targetYear}
                     </span>
                   </div>
@@ -40,14 +40,14 @@ export default async function HistoryPage() {
                       className={
                         isFail
                           ? "rubric"
-                          : "font-[--font-display] uppercase tracking-[0.12em] text-[--color-marian]"
+                          : "font-display uppercase tracking-[0.12em] text-marian"
                       }
                     >
                       {T.history.statuses[
                         r.status as keyof typeof T.history.statuses
                       ] ?? r.status}
                     </span>
-                    <span className="text-[--color-ink-faded]">
+                    <span className="text-ink-faded">
                       {" · "}
                       {T.history.sentCount(r.totalSentOk, r.totalIntended)}
                     </span>
