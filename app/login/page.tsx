@@ -1,6 +1,8 @@
 "use client";
 import { useActionState } from "react";
 import { loginAction, type LoginState } from "./actions";
+import { ActionButton } from "@/components/ActionButton";
+import { PasswordInput } from "@/components/PasswordInput";
 import { T } from "@/lib/i18n/pl";
 
 export default function LoginPage() {
@@ -17,8 +19,7 @@ export default function LoginPage() {
         <form action={action} className="space-y-4">
           <label className="block">
             <span className="eyebrow">{T.login.passwordLabel}</span>
-            <input
-              type="password"
+            <PasswordInput
               name="password"
               autoFocus
               required
@@ -31,12 +32,12 @@ export default function LoginPage() {
           {state?.error === "rate" && (
             <p className="rubric text-sm">{T.login.rateLimited}</p>
           )}
-          <button
-            disabled={pending}
+          <ActionButton
+            pending={pending}
             className="btn-solid w-full p-3 text-lg bg-ink text-paper disabled:opacity-50"
           >
             {T.login.submit}
-          </button>
+          </ActionButton>
         </form>
       </div>
     </main>

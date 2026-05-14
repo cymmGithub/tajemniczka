@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { setPaused } from "./actions";
 import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 import { TestSmsButton } from "@/components/TestSmsButton";
+import { ActionButton } from "@/components/ActionButton";
 import { T } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
@@ -26,10 +27,7 @@ export default async function SettingsPage() {
         <div className="eyebrow mb-2">Wysyłka</div>
         <div className="card-paper p-4 space-y-3">
           <form action={togglePause}>
-            <button
-              type="submit"
-              className="w-full text-left flex items-center justify-between gap-3"
-            >
+            <ActionButton className="btn-row w-full text-left flex items-center justify-between gap-3">
               <span className="display text-lg">{T.settings.pauseLabel}</span>
               <span
                 className={
@@ -40,7 +38,7 @@ export default async function SettingsPage() {
               >
                 {paused ? "✓ włączona" : "wyłączona"}
               </span>
-            </button>
+            </ActionButton>
           </form>
           <p className="text-sm text-ink-soft italic">
             {T.settings.pauseHelp}

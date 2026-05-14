@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { sendTestSms, type TestSmsResult } from "@/app/ustawienia/actions";
+import { ActionButton } from "@/components/ActionButton";
 import { T } from "@/lib/i18n/pl";
 
 export function TestSmsButton() {
@@ -11,13 +12,12 @@ export function TestSmsButton() {
   );
   return (
     <form action={action} className="space-y-2">
-      <button
-        type="submit"
-        disabled={pending}
+      <ActionButton
+        pending={pending}
         className="btn-solid w-full p-3 text-lg bg-marian text-paper disabled:opacity-50"
       >
-        {pending ? "Wysyłanie…" : T.settings.sendTest}
-      </button>
+        {T.settings.sendTest}
+      </ActionButton>
       {state?.ok && state.testMode && (
         <p className="text-sm text-ink-soft italic">
           {T.settings.testSentTestMode}

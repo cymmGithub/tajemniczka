@@ -2,6 +2,7 @@ import { db } from "@/lib/db/client";
 import { members } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { upsertMember, deleteMember } from "../actions";
+import { ActionButton } from "@/components/ActionButton";
 import { T } from "@/lib/i18n/pl";
 import { redirect } from "next/navigation";
 
@@ -66,16 +67,16 @@ export default async function EditMemberPage({
             className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg tabular-nums"
           />
         </label>
-        <button className="btn-solid w-full p-3 text-lg bg-ink text-paper">
+        <ActionButton className="btn-solid w-full p-3 text-lg bg-ink text-paper">
           {T.members.save}
-        </button>
+        </ActionButton>
       </form>
 
       {row && (
         <form action={remove} className="text-center">
-          <button className="rubric text-sm underline underline-offset-4 btn-link">
+          <ActionButton className="rubric text-sm underline underline-offset-4 btn-link">
             {T.members.remove}
-          </button>
+          </ActionButton>
         </form>
       )}
     </main>

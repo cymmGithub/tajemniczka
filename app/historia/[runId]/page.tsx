@@ -2,6 +2,7 @@ import { db } from "@/lib/db/client";
 import { sendRuns, sendResults } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { retrySend } from "../actions";
+import { ActionButton } from "@/components/ActionButton";
 import { T, MONTHS_PL_TITLE } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
@@ -90,9 +91,9 @@ export default async function RunDetailPage({
               <span className={resultClass(r.status)}>{r.status}</span>
               {(r.status === "failed" || r.status === "undelivered") && (
                 <form action={retrySend.bind(null, r.id)}>
-                  <button className="block text-xs rubric underline underline-offset-4 mt-2 btn-link">
+                  <ActionButton className="block text-xs rubric underline underline-offset-4 mt-2 btn-link">
                     {T.history.retry}
-                  </button>
+                  </ActionButton>
                 </form>
               )}
             </div>

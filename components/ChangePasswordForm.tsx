@@ -5,6 +5,8 @@ import {
   changePassword,
   type ChangePasswordResult,
 } from "@/app/ustawienia/actions";
+import { ActionButton } from "@/components/ActionButton";
+import { PasswordInput } from "@/components/PasswordInput";
 import { T } from "@/lib/i18n/pl";
 
 const initial: ChangePasswordResult = {};
@@ -27,23 +29,20 @@ export function ChangePasswordForm() {
 
   return (
     <form action={action} className="space-y-3">
-      <input
+      <PasswordInput
         name="current"
-        type="password"
         placeholder={T.settings.currentPassword}
         required
         className={inputClass}
       />
-      <input
+      <PasswordInput
         name="next"
-        type="password"
         placeholder={T.settings.newPassword}
         required
         className={inputClass}
       />
-      <input
+      <PasswordInput
         name="confirm"
-        type="password"
         placeholder={T.settings.confirmPassword}
         required
         className={inputClass}
@@ -54,12 +53,12 @@ export function ChangePasswordForm() {
           {T.settings.passwordChanged}
         </p>
       )}
-      <button
-        disabled={pending}
+      <ActionButton
+        pending={pending}
         className="btn-solid w-full p-3 text-base bg-ink text-paper disabled:opacity-50"
       >
         {T.settings.changePassword}
-      </button>
+      </ActionButton>
     </form>
   );
 }

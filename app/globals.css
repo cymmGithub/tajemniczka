@@ -114,9 +114,54 @@ body {
   transition: color 120ms ease, text-decoration-thickness 120ms ease;
 }
 
-.btn-link:hover {
+.btn-link:hover:not(:disabled) {
   text-decoration-thickness: 2px;
   filter: brightness(1.1);
+}
+
+.btn-link:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Row-style button: full-width "menu item" with subtle paper-deep hover.
+   Used for toggle rows (e.g. pauza wysyłki) where a solid bg would be too loud. */
+.btn-row {
+  cursor: pointer;
+  transition: background-color 120ms ease;
+  border-radius: 2px;
+  margin: -0.5rem;
+  padding: 0.5rem;
+}
+
+.btn-row:hover:not(:disabled) {
+  background-color: var(--color-paper-deep);
+}
+
+.btn-row:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.btn-row:disabled {
+  cursor: not-allowed;
+}
+
+/* Spinner — rotating ring inheriting currentColor. Used inside ActionButton
+   when a server-action submit is pending. */
+.btn-spinner {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spinner-rotate 0.7s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes btn-spinner-rotate {
+  to { transform: rotate(360deg); }
 }
 
 /* Rubric — small caps in liturgical red, used like a label/marginalia */

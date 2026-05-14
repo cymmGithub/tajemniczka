@@ -45,11 +45,21 @@ async function valid(cookieValue: string | undefined): Promise<boolean> {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const cookie = req.cookies.get(COOKIE_NAME)?.value;
+  const isAuthed = await valid(cookie);
+
+  // Authed user landing on /login → bounce to home (avoid showing both nav
+  // and the login card simultaneously).
+  if (pathname === "/login" && isAuthed) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
   if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     return NextResponse.next();
   }
-  const cookie = req.cookies.get(COOKIE_NAME)?.value;
-  if (!(await valid(cookie))) {
+  if (!isAuthed) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
