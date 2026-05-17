@@ -1,6 +1,7 @@
 import { assignment } from "@/lib/rotation/algorithm";
 import { cycleMonths } from "@/lib/rotation/cycle";
 import { MONTHS_PL_SHORT } from "@/lib/i18n/pl";
+import type { Anchor } from "@/lib/rotation/ring";
 import { Tajemnica } from "./Tajemnica";
 
 function isCurrent(
@@ -14,10 +15,12 @@ export function CycleTable({
   start,
   bySlot,
   now,
+  anchor,
 }: {
   start: { year: number; month: number };
   bySlot: Map<number, { name: string }>;
   now: Date;
+  anchor: Anchor;
 }) {
   const months = cycleMonths(start);
   const slots = Array.from({ length: 20 }, (_, i) => i + 1);
@@ -60,7 +63,7 @@ export function CycleTable({
                     )}
                   </th>
                   {months.map((m, i) => {
-                    const tj = assignment(slot, m.year, m.month);
+                    const tj = assignment(slot, m.year, m.month, anchor);
                     return (
                       <td
                         key={i}

@@ -11,15 +11,30 @@ export async function GET(req: Request) {
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  const recent = (
-    await db
-      .select()
-      .from(sendRuns)
-      .where(eq(sendRuns.status, "in_progress"))
-      .orderBy(desc(sendRuns.firedAt))
-      .limit(1)
-  )[0];
-  if (!recent) return NextResponse.json({ skipped: "no in_progress run" });
-  await evaluateRun(recent.id);
-  return NextResponse.json({ ok: true, runId: recent.id });
+  const inProgress = await db
+    .select({ id: sendRuns.id, groupId: sendRuns.groupId })
+    .from(sendRuns)
+    .where(eq(sendRuns.status, "in_progress"))
+    .orderBy(desc(sendRuns.firedAt));
+
+  if (inProgress.length === 0) {
+    return NextResponse.json({ skipped: "no in_progress runs" });
+  }
+
+  const evaluated = [];
+  for (const r of inProgress) {
+    try {
+      await evaluateRun(r.id);
+      evaluated.push({ runId: r.id, groupId: r.groupId, ok: true });
+    } catch (e) {
+      evaluated.push({
+        runId: r.id,
+        groupId: r.groupId,
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+  }
+
+  return NextResponse.json({ ok: true, evaluated });
 }

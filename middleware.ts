@@ -68,5 +68,10 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|icon-).*)"],
+  matcher: [
+    // Exclude framework asset paths, common static asset extensions, and the
+    // specific top-level public files we ship. Anything else falls through to
+    // the auth gate.
+    "/((?!_next/static|_next/image|favicon\\.ico|manifest\\.webmanifest|icon-|.*\\.(?:jpg|jpeg|png|webp|svg|gif|ico|avif)$).*)",
+  ],
 };

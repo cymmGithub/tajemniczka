@@ -80,8 +80,8 @@ export const T = {
     passwordsDoNotMatch: "Hasła nie są zgodne.",
     passwordChanged: "Hasło zmienione.",
   },
-  failureSms: (names: string[]) =>
-    `Tajemniczka: nie wysłano SMS do: ${names.join(", ")}. Sprawdź aplikację.`,
+  failureSms: (groupLabel: string, names: string[]) =>
+    `Tajemniczka (${groupLabel}): nie wysłano SMS do: ${names.join(", ")}. Sprawdź aplikację.`,
   monthLabel: (year: number, month: number) =>
     `${MONTHS_PL_TITLE[month - 1]} ${year}`,
 } as const;

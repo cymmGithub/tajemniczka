@@ -28,6 +28,7 @@ const DEMO_MEMBERS = [
 
 const YEAR = 2026;
 const MONTH = 6;
+const DEMO_ANCHOR = { year: 2026, month: 6 };
 
 function Tajemnica({ roman, group }: { roman: string; group: TajemnicaCode }) {
   return (
@@ -118,7 +119,7 @@ function Tablica() {
 
       <ol className="card-paper divide-y divide-paper-shadow">
         {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
-          const tj = assignment(slot, YEAR, MONTH);
+          const tj = assignment(slot, YEAR, MONTH, DEMO_ANCHOR);
           const m = DEMO_MEMBERS.find((d) => d.slot === slot);
           return (
             <li key={slot} className="flex items-baseline gap-4 px-4 py-3">

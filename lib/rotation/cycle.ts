@@ -1,7 +1,7 @@
-import { ANCHOR_YEAR, ANCHOR_MONTH } from "./ring";
+import type { Anchor } from "./ring";
 
-export function monthsSinceAnchor(year: number, month: number): number {
-  return (year - ANCHOR_YEAR) * 12 + (month - ANCHOR_MONTH);
+export function monthsSinceAnchor(year: number, month: number, anchor: Anchor): number {
+  return (year - anchor.year) * 12 + (month - anchor.month);
 }
 
 export function addMonths(
@@ -19,11 +19,12 @@ export function addMonths(
 export function startOfCycle(
   year: number,
   month: number,
+  anchor: Anchor,
 ): { year: number; month: number } {
-  const since = monthsSinceAnchor(year, month);
-  if (since < 0) return { year: ANCHOR_YEAR, month: ANCHOR_MONTH };
+  const since = monthsSinceAnchor(year, month, anchor);
+  if (since < 0) return { year: anchor.year, month: anchor.month };
   const cycleStart = Math.floor(since / 20) * 20;
-  return addMonths(ANCHOR_YEAR, ANCHOR_MONTH, cycleStart);
+  return addMonths(anchor.year, anchor.month, cycleStart);
 }
 
 export function cycleMonths(start: {

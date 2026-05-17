@@ -5,22 +5,25 @@ import {
   startOfCycle,
   cycleMonths,
 } from "../../lib/rotation/cycle";
+import type { Anchor } from "../../lib/rotation/ring";
+
+const JUN_2026: Anchor = { year: 2026, month: 6 };
 
 describe("monthsSinceAnchor", () => {
   it("returns 0 at anchor (June 2026)", () => {
-    expect(monthsSinceAnchor(2026, 6)).toBe(0);
+    expect(monthsSinceAnchor(2026, 6, JUN_2026)).toBe(0);
   });
   it("returns -1 one month before anchor (May 2026)", () => {
-    expect(monthsSinceAnchor(2026, 5)).toBe(-1);
+    expect(monthsSinceAnchor(2026, 5, JUN_2026)).toBe(-1);
   });
   it("returns 1 one month after anchor (July 2026)", () => {
-    expect(monthsSinceAnchor(2026, 7)).toBe(1);
+    expect(monthsSinceAnchor(2026, 7, JUN_2026)).toBe(1);
   });
   it("returns 12 one year after anchor (June 2027)", () => {
-    expect(monthsSinceAnchor(2027, 6)).toBe(12);
+    expect(monthsSinceAnchor(2027, 6, JUN_2026)).toBe(12);
   });
   it("returns -6 for December 2025", () => {
-    expect(monthsSinceAnchor(2025, 12)).toBe(-6);
+    expect(monthsSinceAnchor(2025, 12, JUN_2026)).toBe(-6);
   });
 });
 
@@ -50,31 +53,31 @@ describe("addMonths", () => {
 
 describe("startOfCycle", () => {
   it("anchor month → anchor", () => {
-    expect(startOfCycle(2026, 6)).toEqual({ year: 2026, month: 6 });
+    expect(startOfCycle(2026, 6, JUN_2026)).toEqual({ year: 2026, month: 6 });
   });
   it("pre-anchor (May 2026) → anchor", () => {
-    expect(startOfCycle(2026, 5)).toEqual({ year: 2026, month: 6 });
+    expect(startOfCycle(2026, 5, JUN_2026)).toEqual({ year: 2026, month: 6 });
   });
   it("far pre-anchor (Jan 2025) → anchor", () => {
-    expect(startOfCycle(2025, 1)).toEqual({ year: 2026, month: 6 });
+    expect(startOfCycle(2025, 1, JUN_2026)).toEqual({ year: 2026, month: 6 });
   });
   it("anchor + 7 (Jan 2027) → still cycle 0 (anchor)", () => {
-    expect(startOfCycle(2027, 1)).toEqual({ year: 2026, month: 6 });
+    expect(startOfCycle(2027, 1, JUN_2026)).toEqual({ year: 2026, month: 6 });
   });
   it("anchor + 19 (Jan 2028) → still cycle 0 (anchor)", () => {
-    expect(startOfCycle(2028, 1)).toEqual({ year: 2026, month: 6 });
+    expect(startOfCycle(2028, 1, JUN_2026)).toEqual({ year: 2026, month: 6 });
   });
   it("anchor + 20 (Feb 2028) → cycle 1", () => {
-    expect(startOfCycle(2028, 2)).toEqual({ year: 2028, month: 2 });
+    expect(startOfCycle(2028, 2, JUN_2026)).toEqual({ year: 2028, month: 2 });
   });
   it("anchor + 23 (May 2028) → still cycle 1", () => {
-    expect(startOfCycle(2028, 5)).toEqual({ year: 2028, month: 2 });
+    expect(startOfCycle(2028, 5, JUN_2026)).toEqual({ year: 2028, month: 2 });
   });
   it("anchor + 39 (Sep 2029) → still cycle 1", () => {
-    expect(startOfCycle(2029, 9)).toEqual({ year: 2028, month: 2 });
+    expect(startOfCycle(2029, 9, JUN_2026)).toEqual({ year: 2028, month: 2 });
   });
   it("anchor + 40 (Oct 2029) → cycle 2", () => {
-    expect(startOfCycle(2029, 10)).toEqual({ year: 2029, month: 10 });
+    expect(startOfCycle(2029, 10, JUN_2026)).toEqual({ year: 2029, month: 10 });
   });
 });
 

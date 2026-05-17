@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { nowInWarsaw, isLastDayOfMonth, nextDayMonthYear } from "@/lib/tz";
 import { runMonthlySend } from "@/lib/sms/send-monthly";
+import { db } from "@/lib/db/client";
+import { groups } from "@/lib/db/schema";
+import { asc } from "drizzle-orm";
 
 export const runtime = "nodejs";
 
@@ -14,6 +17,25 @@ export async function GET(req: Request) {
     return NextResponse.json({ skipped: "not last day", now: now.toISOString() });
   }
   const target = nextDayMonthYear(now);
-  const result = await runMonthlySend(target.year, target.month);
-  return NextResponse.json({ ok: true, ...result, target });
+
+  const allGroups = await db
+    .select({ id: groups.id })
+    .from(groups)
+    .orderBy(asc(groups.id));
+
+  const results = [];
+  for (const g of allGroups) {
+    try {
+      const r = await runMonthlySend(target.year, target.month, g.id);
+      results.push({ ok: true, ...r });
+    } catch (e) {
+      results.push({
+        groupId: g.id,
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+  }
+
+  return NextResponse.json({ ok: true, target, results });
 }

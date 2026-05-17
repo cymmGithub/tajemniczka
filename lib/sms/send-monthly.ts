@@ -1,26 +1,32 @@
 import { db } from "@/lib/db/client";
-import { members, sendRuns, sendResults, settings } from "@/lib/db/schema";
+import { groups, members, sendRuns, sendResults } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { formatSmsBody } from "@/lib/rotation/format";
 import { sendOne } from "./smsapi-client";
 
 export interface MonthlySendResult {
   runId: number;
+  groupId: number;
   pausedSkipped: boolean;
 }
 
 export async function runMonthlySend(
   targetYear: number,
   targetMonth: number,
+  groupId: number,
 ): Promise<MonthlySendResult> {
-  const cfg = (
-    await db.select().from(settings).where(eq(settings.id, 1)).limit(1)
+  const group = (
+    await db.select().from(groups).where(eq(groups.id, groupId)).limit(1)
   )[0];
+  if (!group) {
+    throw new Error(`group ${groupId} does not exist`);
+  }
 
-  if (cfg?.paused) {
+  if (group.paused) {
     const [run] = await db
       .insert(sendRuns)
       .values({
+        groupId,
         firedAt: new Date(),
         targetYear,
         targetMonth,
@@ -28,18 +34,24 @@ export async function runMonthlySend(
         totalIntended: 0,
         totalSentOk: 0,
         totalFailed: 0,
-        notes: "settings.paused = true",
+        notes: "groups.paused = true",
       })
       .returning({ id: sendRuns.id });
-    return { runId: run.id, pausedSkipped: true };
+    return { runId: run.id, groupId, pausedSkipped: true };
   }
 
-  const memberRows = await db.select().from(members);
+  const anchor = { year: group.anchorYear, month: group.anchorMonth };
+
+  const memberRows = await db
+    .select()
+    .from(members)
+    .where(eq(members.groupId, groupId));
   const intended = memberRows.length;
 
   const [run] = await db
     .insert(sendRuns)
     .values({
+      groupId,
       firedAt: new Date(),
       targetYear,
       targetMonth,
@@ -51,7 +63,7 @@ export async function runMonthlySend(
     .returning({ id: sendRuns.id });
 
   if (memberRows.length === 0) {
-    return { runId: run.id, pausedSkipped: false };
+    return { runId: run.id, groupId, pausedSkipped: false };
   }
 
   // Bulk-insert all "queued" rows in a single round-trip, then dispatch
@@ -60,10 +72,11 @@ export async function runMonthlySend(
   // function limit. Delivery status arrives asynchronously via notify_url.
   const queuedRows = memberRows.map((m) => ({
     runId: run.id,
+    groupId,
     slot: m.slot,
     memberName: m.name,
     phoneE164: m.phoneE164,
-    messageBody: formatSmsBody(m.slot, targetYear, targetMonth),
+    messageBody: formatSmsBody(m.slot, targetYear, targetMonth, anchor),
     status: "queued" as const,
   }));
 
@@ -104,5 +117,5 @@ export async function runMonthlySend(
     }),
   );
 
-  return { runId: run.id, pausedSkipped: false };
+  return { runId: run.id, groupId, pausedSkipped: false };
 }

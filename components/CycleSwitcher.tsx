@@ -1,19 +1,23 @@
 import Link from "next/link";
 import { addMonths } from "@/lib/rotation/cycle";
 import { MONTHS_PL_TITLE } from "@/lib/i18n/pl";
-import { ANCHOR_YEAR, ANCHOR_MONTH } from "@/lib/rotation/ring";
+import type { Anchor } from "@/lib/rotation/ring";
 
 export function CycleSwitcher({
   start,
+  anchor,
+  basePath,
 }: {
   start: { year: number; month: number };
+  anchor: Anchor;
+  basePath: string;
 }) {
   const prev = addMonths(start.year, start.month, -20);
   const next = addMonths(start.year, start.month, 20);
   const end = addMonths(start.year, start.month, 19);
   const prevIsBeforeAnchor =
-    prev.year < ANCHOR_YEAR ||
-    (prev.year === ANCHOR_YEAR && prev.month < ANCHOR_MONTH);
+    prev.year < anchor.year ||
+    (prev.year === anchor.year && prev.month < anchor.month);
 
   return (
     <div className="max-w-2xl mx-auto px-5 pt-4">
@@ -39,14 +43,14 @@ export function CycleSwitcher({
           </span>
         ) : (
           <Link
-            href={`/?view=year&y=${prev.year}&m=${prev.month}`}
+            href={`${basePath}?view=year&y=${prev.year}&m=${prev.month}`}
             className="italic text-ink-soft hover:text-ink py-2 pr-3 whitespace-nowrap"
           >
             ‹ Poprzedni cykl
           </Link>
         )}
         <Link
-          href={`/?view=year&y=${next.year}&m=${next.month}`}
+          href={`${basePath}?view=year&y=${next.year}&m=${next.month}`}
           className="italic text-ink-soft hover:text-ink py-2 pl-3 whitespace-nowrap"
         >
           Następny cykl ›

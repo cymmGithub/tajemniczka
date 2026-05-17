@@ -14,5 +14,11 @@ export const RING: ReadonlyArray<RingEntry> = GROUPS.flatMap((group) =>
   ROMAN.map((roman) => ({ roman, group, short: `${roman} ${group}` })),
 );
 
-export const ANCHOR_YEAR = 2026;
-export const ANCHOR_MONTH = 6; // June 2026 = month 0 of rotation
+/**
+ * A rotation anchor — the (year, month) where slot 1 begins the cycle on
+ * Mystery I Ś (RING[0]). Each kółko stores its own anchor in `groups`.
+ */
+export interface Anchor {
+  year: number;
+  month: number;
+}

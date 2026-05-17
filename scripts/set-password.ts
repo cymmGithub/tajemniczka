@@ -15,7 +15,7 @@ const existing = (
   await db.select().from(settings).where(eq(settings.id, 1)).limit(1)
 )[0];
 if (!existing) {
-  await db.insert(settings).values({ id: 1, paused: false, passwordHash: hash });
+  await db.insert(settings).values({ id: 1, passwordHash: hash });
 } else {
   await db
     .update(settings)

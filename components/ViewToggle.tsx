@@ -4,13 +4,15 @@ export function ViewToggle({
   view,
   year,
   month,
+  basePath,
 }: {
   view: "month" | "year";
   year: number;
   month: number;
+  basePath: string;
 }) {
-  const monthHref = `/?view=month&y=${year}&m=${month}`;
-  const yearHref = `/?view=year&y=${year}&m=${month}`;
+  const monthHref = `${basePath}?view=month&y=${year}&m=${month}`;
+  const yearHref = `${basePath}?view=year&y=${year}&m=${month}`;
   const base = "eyebrow px-3 py-2";
   const active = `${base} text-rubric underline underline-offset-4`;
   const inactive = `${base} hover:text-ink`;

@@ -1,10 +1,15 @@
 import { db } from "@/lib/db/client";
-import { sendRuns, sendResults } from "@/lib/db/schema";
+import { groups, sendRuns, sendResults } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { sendOne } from "./smsapi-client";
 import { T } from "@/lib/i18n/pl";
 
 export async function evaluateRun(runId: number): Promise<void> {
+  const run = (
+    await db.select().from(sendRuns).where(eq(sendRuns.id, runId)).limit(1)
+  )[0];
+  if (!run) return;
+
   const results = await db
     .select()
     .from(sendResults)
@@ -31,7 +36,13 @@ export async function evaluateRun(runId: number): Promise<void> {
   if (failed.length > 0) {
     const dad = process.env.DAD_PHONE_NUMBER;
     if (!dad) return;
-    const result = await sendOne(dad, T.failureSms(failed.map((f) => f.memberName)));
+    const group = (
+      await db.select().from(groups).where(eq(groups.id, run.groupId)).limit(1)
+    )[0];
+    const result = await sendOne(
+      dad,
+      T.failureSms(group?.shortLabel ?? `kółko #${run.groupId}`, failed.map((f) => f.memberName)),
+    );
     if (!result.ok) {
       console.error("Failed to send failure-notification SMS to dad", result);
     }
