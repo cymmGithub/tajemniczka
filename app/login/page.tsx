@@ -23,13 +23,10 @@ export default function LoginPage() {
           <div className="fleuron mt-4 mx-auto max-w-[14rem] text-sm">
             <span>✦</span>
           </div>
-          <p className="display italic text-base text-ink-soft mt-3 leading-snug">
-            Tajemnice różańca świętego
-          </p>
         </header>
 
-        {/* Parish photo */}
-        <figure className="text-center mt-9">
+        {/* Parish photo — uncaptioned, lets the image speak */}
+        <div className="text-center mt-10">
           <div className="gilt-frame mx-auto aspect-square w-full max-w-[18rem]">
             <Image
               src="/parafia-dys.jpg"
@@ -40,17 +37,10 @@ export default function LoginPage() {
               className="object-cover"
             />
           </div>
-          <figcaption className="eyebrow mt-5 text-ink-faded">
-            Parafia w Dysie
-          </figcaption>
-        </figure>
+        </div>
 
         {/* Login form — sits directly on the parchment, no card */}
-        <form action={action} className="mt-12 space-y-7">
-          <div className="text-center">
-            <h2 className="rubric text-sm">Wejście</h2>
-          </div>
-
+        <form action={action} className="mt-14 space-y-7">
           <label className="block">
             <span className="sr-only">{T.login.passwordLabel}</span>
             <PasswordInput
