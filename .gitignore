@@ -15,4 +15,11 @@ scripts/members.json
 redesign-*.png
 demo-*.png
 real-*.png
+g[12]-*.png
+g[0-9][0-9]-*.png
+picker-*.png
+masthead-*.png
+popieluszko-card-*.png
+global-ustawienia.png
+.claude/
 tsconfig.tsbuildinfo
