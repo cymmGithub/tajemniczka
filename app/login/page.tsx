@@ -12,16 +12,31 @@ export default function LoginPage() {
     null,
   );
   return (
-    <main className="px-5 py-8">
-      <div className="max-w-sm mx-auto space-y-7">
-        <figure className="text-center">
+    <main className="px-5 py-10 sm:py-14">
+      <div className="max-w-sm mx-auto">
+
+        {/* Title block — sets the devotional title-page tone */}
+        <header className="text-center">
+          <h1 className="display text-5xl text-ink leading-none tracking-[0.03em]">
+            Tajemniczka
+          </h1>
+          <div className="fleuron mt-4 mx-auto max-w-[14rem] text-sm">
+            <span>✦</span>
+          </div>
+          <p className="display italic text-base text-ink-soft mt-3 leading-snug">
+            Tajemnice różańca świętego
+          </p>
+        </header>
+
+        {/* Parish photo */}
+        <figure className="text-center mt-9">
           <div className="gilt-frame mx-auto aspect-square w-full max-w-[18rem]">
             <Image
               src="/parafia-dys.jpg"
               alt="Kościół parafialny w Dysie"
               fill
               priority
-              sizes="(max-width: 480px) 90vw, 18rem"
+              sizes="(max-width: 480px) 80vw, 18rem"
               className="object-cover"
             />
           </div>
@@ -30,34 +45,39 @@ export default function LoginPage() {
           </figcaption>
         </figure>
 
-        <div className="card-paper p-7">
-          <div className="text-center mb-5">
-            <div className="eyebrow">Wejście</div>
+        {/* Login form — sits directly on the parchment, no card */}
+        <form action={action} className="mt-12 space-y-7">
+          <div className="text-center">
+            <h2 className="rubric text-sm">Wejście</h2>
           </div>
-          <form action={action} className="space-y-4">
-            <label className="block">
-              <span className="eyebrow">{T.login.passwordLabel}</span>
-              <PasswordInput
-                name="password"
-                autoFocus
-                required
-                className="mt-2 block w-full bg-paper border border-paper-shadow focus:border-marian outline-none p-3 text-lg"
-              />
-            </label>
-            {state?.error === "invalid" && (
-              <p className="rubric text-sm">{T.login.invalid}</p>
-            )}
-            {state?.error === "rate" && (
-              <p className="rubric text-sm">{T.login.rateLimited}</p>
-            )}
-            <ActionButton
-              pending={pending}
-              className="btn-solid w-full p-3 text-lg bg-ink text-paper disabled:opacity-50"
-            >
-              {T.login.submit}
-            </ActionButton>
-          </form>
-        </div>
+
+          <label className="block">
+            <span className="sr-only">{T.login.passwordLabel}</span>
+            <PasswordInput
+              name="password"
+              autoFocus
+              required
+              placeholder={T.login.passwordLabel}
+              aria-label={T.login.passwordLabel}
+              className="input-rule pl-12"
+            />
+          </label>
+
+          {state?.error === "invalid" && (
+            <p className="rubric text-sm italic text-center">{T.login.invalid}</p>
+          )}
+          {state?.error === "rate" && (
+            <p className="rubric text-sm italic text-center">{T.login.rateLimited}</p>
+          )}
+
+          <ActionButton
+            pending={pending}
+            className="btn-outline-gilt w-full py-3 text-lg"
+          >
+            {T.login.submit}
+          </ActionButton>
+        </form>
+
       </div>
     </main>
   );
