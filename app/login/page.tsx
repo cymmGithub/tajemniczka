@@ -39,8 +39,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Login form — sits directly on the parchment, no card */}
-        <form action={action} className="mt-14 space-y-7">
+        {/* Login form — sits directly on the parchment, no card; constrained
+            to the same max-width as the church photo above for vertical
+            visual alignment */}
+        <form action={action} className="mt-14 space-y-7 mx-auto max-w-[18rem]">
           <label className="block">
             <span className="sr-only">{T.login.passwordLabel}</span>
             <PasswordInput
