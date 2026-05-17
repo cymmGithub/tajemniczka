@@ -38,5 +38,5 @@ export async function retrySend(resultId: number): Promise<void> {
       })
       .where(eq(sendResults.id, resultId));
   }
-  revalidatePath(`/historia/${r.runId}`);
+  revalidatePath(`/g/${r.groupId}/historia/${r.runId}`);
 }

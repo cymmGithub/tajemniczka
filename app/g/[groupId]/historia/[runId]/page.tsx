@@ -1,8 +1,10 @@
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { sendRuns, sendResults } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { retrySend } from "../actions";
 import { ActionButton } from "@/components/ActionButton";
+import { getGroup } from "@/lib/db/groups";
 import { T, MONTHS_PL_TITLE } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
@@ -20,12 +22,20 @@ function resultClass(status: string): string {
 export default async function RunDetailPage({
   params,
 }: {
-  params: Promise<{ runId: string }>;
+  params: Promise<{ groupId: string; runId: string }>;
 }) {
-  const { runId } = await params;
+  const { groupId, runId } = await params;
+  const gid = Number(groupId);
   const id = Number(runId);
+  const group = await getGroup(gid);
+  if (!group) notFound();
+
   const run = (
-    await db.select().from(sendRuns).where(eq(sendRuns.id, id)).limit(1)
+    await db
+      .select()
+      .from(sendRuns)
+      .where(and(eq(sendRuns.id, id), eq(sendRuns.groupId, group.id)))
+      .limit(1)
   )[0];
   if (!run) {
     return (

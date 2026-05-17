@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/client";
 import { settings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -8,14 +7,6 @@ import { hashPassword, verifyPassword } from "@/lib/auth/password";
 import { sendOne, smsTestMode } from "@/lib/sms/smsapi-client";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { T } from "@/lib/i18n/pl";
-
-export async function setPaused(paused: boolean): Promise<void> {
-  await db
-    .update(settings)
-    .set({ paused, updatedAt: new Date() })
-    .where(eq(settings.id, 1));
-  revalidatePath("/ustawienia");
-}
 
 export type TestSmsResult =
   | { ok: true; testMode: boolean }

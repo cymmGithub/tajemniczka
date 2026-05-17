@@ -273,6 +273,69 @@ body {
   padding-bottom: 0.5rem;
 }
 
+/* Devotional icon frame — gilt outer ring + paper matting + hairline inner
+   bevel. Use on circular portrait wrappers. `overflow: hidden` clips the
+   image to the circle; the box-shadow stack paints the frame outside the
+   border (shadows render outside `overflow: hidden`). Multi-shadow paint
+   order: earlier shadows render on top of later ones. */
+.portrait-frame {
+  position: relative;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  box-shadow:
+    /* hairline inner bevel painted on top of the image */
+    inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 70%, var(--color-ink)),
+    /* paper-deep "matting" band immediately outside the photo edge */
+    0 0 0 5px var(--color-paper-deep),
+    /* thin dark hairline between matting and outer gilt */
+    0 0 0 6px color-mix(in oklab, var(--color-gold) 60%, var(--color-ink)),
+    /* gilt outer ring (5px wide: positions 6–11px) */
+    0 0 0 11px var(--color-gold),
+    /* outermost dark hairline to seat the frame on paper */
+    0 0 0 12px color-mix(in oklab, var(--color-gold) 50%, var(--color-ink)),
+    /* drop shadow for depth */
+    0 6px 18px -3px color-mix(in oklab, var(--color-ink) 32%, transparent),
+    0 2px 4px color-mix(in oklab, var(--color-ink) 20%, transparent);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Hover: slightly brighter gilt + slightly taller drop shadow. */
+.group:hover .portrait-frame,
+.group:focus-visible .portrait-frame {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 80%, var(--color-ink)),
+    0 0 0 5px var(--color-paper-deep),
+    0 0 0 6px color-mix(in oklab, var(--color-gold) 70%, var(--color-ink)),
+    0 0 0 11px color-mix(in oklab, var(--color-gold) 92%, white),
+    0 0 0 12px color-mix(in oklab, var(--color-gold) 55%, var(--color-ink)),
+    0 10px 26px -4px color-mix(in oklab, var(--color-ink) 38%, transparent),
+    0 3px 6px color-mix(in oklab, var(--color-ink) 24%, transparent);
+}
+
+/* Slim variant for the in-group masthead's small (~48 px) portrait. The
+   triple-ring is too busy at that size — a single hairline gilt ring +
+   drop shadow reads cleaner. */
+.portrait-frame-sm {
+  position: relative;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 60%, var(--color-ink-soft)),
+    0 0 0 2px var(--color-gold),
+    0 1px 3px color-mix(in oklab, var(--color-ink) 22%, transparent);
+  transition: box-shadow 0.2s ease;
+}
+
+.group:hover .portrait-frame-sm,
+.group:focus-visible .portrait-frame-sm {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 80%, var(--color-ink-soft)),
+    0 0 0 2px color-mix(in oklab, var(--color-gold) 90%, white),
+    0 2px 5px color-mix(in oklab, var(--color-ink) 26%, transparent);
+}
+
 button,
 input,
 select,

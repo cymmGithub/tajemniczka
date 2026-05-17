@@ -1,15 +1,27 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { sendRuns } from "@/lib/db/schema";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
+import { getGroup } from "@/lib/db/groups";
 import { T, MONTHS_PL_TITLE } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
 
-export default async function HistoryPage() {
+export default async function HistoryPage({
+  params,
+}: {
+  params: Promise<{ groupId: string }>;
+}) {
+  const { groupId } = await params;
+  const id = Number(groupId);
+  const group = await getGroup(id);
+  if (!group) notFound();
+
   const runs = await db
     .select()
     .from(sendRuns)
+    .where(eq(sendRuns.groupId, group.id))
     .orderBy(desc(sendRuns.firedAt))
     .limit(60);
 
@@ -54,7 +66,7 @@ export default async function HistoryPage() {
                   </div>
                 </div>
                 <Link
-                  href={`/historia/${r.id}`}
+                  href={`/g/${group.id}/historia/${r.id}`}
                   className="text-sm underline underline-offset-4"
                 >
                   {T.history.details}

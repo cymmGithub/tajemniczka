@@ -1,50 +1,22 @@
-import { db } from "@/lib/db/client";
-import { settings } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { setPaused } from "./actions";
+import Link from "next/link";
 import { ChangePasswordForm } from "@/components/ChangePasswordForm";
 import { TestSmsButton } from "@/components/TestSmsButton";
-import { ActionButton } from "@/components/ActionButton";
 import { T } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
 
-export default async function SettingsPage() {
-  const row = (
-    await db.select().from(settings).where(eq(settings.id, 1)).limit(1)
-  )[0];
-  const paused = row?.paused ?? false;
-
-  async function togglePause() {
-    "use server";
-    await setPaused(!paused);
-  }
+export default function SettingsPage() {
   return (
     <main className="px-5 py-6 max-w-xl mx-auto space-y-7">
-      <h2 className="display text-3xl heading-rule">{T.settings.title}</h2>
-
-      <section>
-        <div className="eyebrow mb-2">Wysyłka</div>
-        <div className="card-paper p-4 space-y-3">
-          <form action={togglePause}>
-            <ActionButton className="btn-row w-full text-left flex items-center justify-between gap-3">
-              <span className="display text-lg">{T.settings.pauseLabel}</span>
-              <span
-                className={
-                  paused
-                    ? "rubric text-sm"
-                    : "font-display uppercase tracking-[0.12em] text-sm text-ink-faded"
-                }
-              >
-                {paused ? "✓ włączona" : "wyłączona"}
-              </span>
-            </ActionButton>
-          </form>
-          <p className="text-sm text-ink-soft italic">
-            {T.settings.pauseHelp}
-          </p>
-        </div>
-      </section>
+      <div className="flex items-baseline justify-between">
+        <h2 className="display text-3xl heading-rule">{T.settings.title}</h2>
+        <Link
+          href="/"
+          className="eyebrow text-ink-faded hover:text-ink underline underline-offset-4"
+        >
+          ‹ Wybór kółka
+        </Link>
+      </div>
 
       <section>
         <div className="eyebrow mb-2">Test</div>

@@ -1,34 +1,43 @@
 import { db } from "@/lib/db/client";
 import { members } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { notFound, redirect } from "next/navigation";
 import { upsertMember, deleteMember } from "../actions";
 import { ActionButton } from "@/components/ActionButton";
+import { getGroup } from "@/lib/db/groups";
 import { T } from "@/lib/i18n/pl";
-import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditMemberPage({
   params,
 }: {
-  params: Promise<{ slot: string }>;
+  params: Promise<{ groupId: string; slot: string }>;
 }) {
-  const { slot: slotStr } = await params;
+  const { groupId, slot: slotStr } = await params;
+  const gid = Number(groupId);
   const slot = Number(slotStr);
+  const group = await getGroup(gid);
+  if (!group) notFound();
+
   const row = (
-    await db.select().from(members).where(eq(members.slot, slot)).limit(1)
+    await db
+      .select()
+      .from(members)
+      .where(and(eq(members.groupId, group.id), eq(members.slot, slot)))
+      .limit(1)
   )[0];
 
   async function save(formData: FormData) {
     "use server";
-    const result = await upsertMember(slot, formData);
-    if (!result) redirect("/czlonkowie");
+    const result = await upsertMember(gid, slot, formData);
+    if (!result) redirect(`/g/${gid}/czlonkowie`);
   }
 
   async function remove() {
     "use server";
-    await deleteMember(slot);
-    redirect("/czlonkowie");
+    await deleteMember(gid, slot);
+    redirect(`/g/${gid}/czlonkowie`);
   }
 
   return (

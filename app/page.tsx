@@ -1,104 +1,56 @@
+import Link from "next/link";
+import Image from "next/image";
 import { db } from "@/lib/db/client";
-import { members, sendRuns } from "@/lib/db/schema";
-import { desc } from "drizzle-orm";
-import { assignment } from "@/lib/rotation/algorithm";
-import { startOfCycle } from "@/lib/rotation/cycle";
-import { MonthSwitcher } from "@/components/MonthSwitcher";
-import { PhoneToggle } from "@/components/PhoneToggle";
-import { Tajemnica } from "@/components/Tajemnica";
-import { ViewToggle } from "@/components/ViewToggle";
-import { CycleSwitcher } from "@/components/CycleSwitcher";
-import { CycleTable } from "@/components/CycleTable";
-import { T, MONTHS_PL_TITLE } from "@/lib/i18n/pl";
+import { groups } from "@/lib/db/schema";
+import { asc } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage(props: {
-  searchParams: Promise<{ y?: string; m?: string; view?: string }>;
-}) {
-  const sp = await props.searchParams;
-  const now = new Date();
-  const year = sp.y ? Number(sp.y) : now.getFullYear();
-  const month = sp.m ? Number(sp.m) : now.getMonth() + 1;
-  const view = sp.view === "year" ? "year" : "month";
-
-  const memberRows = await db.select().from(members);
-  const bySlot = new Map(memberRows.map((m) => [m.slot, m]));
-
-  if (view === "year") {
-    const start = startOfCycle(year, month);
-    return (
-      <>
-        <ViewToggle view="year" year={year} month={month} />
-        <main className="py-6 max-w-screen-lg mx-auto">
-          <CycleSwitcher start={start} />
-          <CycleTable start={start} bySlot={bySlot} now={now} />
-        </main>
-      </>
-    );
-  }
-
-  const lastRun = (
-    await db.select().from(sendRuns).orderBy(desc(sendRuns.firedAt)).limit(1)
-  )[0];
+export default async function PickerPage() {
+  const rows = await db.select().from(groups).orderBy(asc(groups.id));
 
   return (
-    <>
-      <ViewToggle view="month" year={year} month={month} />
-      <main className="px-5 py-6 max-w-xl mx-auto">
-        <h2 className="display text-3xl text-center heading-rule mb-5 italic">
-          {MONTHS_PL_TITLE[month - 1]}{" "}
-          <span className="text-ink-faded">{year}</span>
-        </h2>
+    <main className="px-5 py-8 max-w-3xl mx-auto">
+      <header className="pt-4 pb-2 text-center">
+        <h1 className="display text-4xl text-ink leading-none">Tajemniczka</h1>
+        <div className="fleuron mt-3 mx-auto max-w-[16rem] text-sm">
+          <span>✦</span>
+        </div>
+        <p className="eyebrow mt-5 text-ink-faded">Wybierz kółko</p>
+      </header>
 
-        <MonthSwitcher year={year} month={month} />
+      <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-7">
+        {rows.map((g) => (
+          <Link
+            key={g.id}
+            href={`/g/${g.id}/`}
+            className="card-paper p-6 pt-7 flex flex-col items-center text-center hover:bg-paper-deep/40 transition-colors group"
+          >
+            <div className="portrait-frame w-44 h-44 sm:w-52 sm:h-52">
+              <Image
+                src={g.imagePath}
+                alt={g.shortLabel}
+                fill
+                priority
+                sizes="(max-width: 640px) 11rem, 13rem"
+                className="object-cover"
+              />
+            </div>
+            <h2 className="display text-xl mt-6 leading-snug italic text-balance group-hover:text-ink-soft">
+              {g.name}
+            </h2>
+          </Link>
+        ))}
+      </div>
 
-        <ol className="card-paper divide-y divide-paper-shadow">
-          {Array.from({ length: 20 }, (_, i) => i + 1).map((slot) => {
-            const tj = assignment(slot, year, month);
-            const m = bySlot.get(slot);
-            return (
-              <li key={slot} className="flex items-baseline gap-4 px-4 py-3">
-                <span className="font-display text-base text-ink-faded w-7 tabular-nums">
-                  {slot}.
-                </span>
-                <span className="flex-1 text-lg leading-snug">
-                  {m ? m.name : <span className="vacant">— {T.vacant} —</span>}
-                </span>
-                <Tajemnica roman={tj.roman} group={tj.group} />
-              </li>
-            );
-          })}
-        </ol>
-
-        <PhoneToggle
-          slots={Array.from({ length: 20 }, (_, i) => i + 1).map((s) => ({
-            slot: s,
-            name: bySlot.get(s)?.name ?? null,
-            phone: bySlot.get(s)?.phoneE164 ?? null,
-          }))}
-        />
-
-        {lastRun && (
-          <div className="mt-5 flex items-center justify-between text-sm text-ink-faded">
-            <span className="italic">
-              Ostatnia wysyłka:{" "}
-              {new Date(lastRun.firedAt).toLocaleDateString("pl-PL")}
-            </span>
-            <span
-              className={
-                lastRun.status === "success"
-                  ? "font-display uppercase tracking-[0.12em] text-marian"
-                  : "rubric"
-              }
-            >
-              {T.history.statuses[
-                lastRun.status as keyof typeof T.history.statuses
-              ] ?? lastRun.status}
-            </span>
-          </div>
-        )}
-      </main>
-    </>
+      <div className="mt-10 text-center">
+        <Link
+          href="/ustawienia"
+          className="eyebrow text-ink-faded hover:text-ink underline underline-offset-4"
+        >
+          Ustawienia globalne
+        </Link>
+      </div>
+    </main>
   );
 }

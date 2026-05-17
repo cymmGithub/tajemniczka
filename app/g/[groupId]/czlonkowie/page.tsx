@@ -1,12 +1,27 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { members } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { getGroup } from "@/lib/db/groups";
 import { T } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
 
-export default async function MembersPage() {
-  const rows = await db.select().from(members);
+export default async function MembersPage({
+  params,
+}: {
+  params: Promise<{ groupId: string }>;
+}) {
+  const { groupId } = await params;
+  const id = Number(groupId);
+  const group = await getGroup(id);
+  if (!group) notFound();
+
+  const rows = await db
+    .select()
+    .from(members)
+    .where(eq(members.groupId, group.id));
   const bySlot = new Map(rows.map((r) => [r.slot, r]));
 
   return (
@@ -26,7 +41,7 @@ export default async function MembersPage() {
                 )}
               </span>
               <Link
-                href={`/czlonkowie/${slot}`}
+                href={`/g/${group.id}/czlonkowie/${slot}`}
                 className="rubric text-sm underline underline-offset-4 btn-link"
               >
                 {m ? "Edytuj" : T.members.add}

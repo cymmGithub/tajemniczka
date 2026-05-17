@@ -5,7 +5,7 @@ export function LogoutButton() {
     <form
       action="/logout"
       method="post"
-      className="absolute top-3 right-3"
+      className="fixed top-3 right-3 z-50"
     >
       <button
         type="submit"
