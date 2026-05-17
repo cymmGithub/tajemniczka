@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { getGroup } from "@/lib/db/groups";
-import { setGroupPaused, updateGroupName } from "./actions";
+import { updateGroupName } from "./actions";
 import { ActionButton } from "@/components/ActionButton";
+import { PauseToggle } from "@/components/PauseToggle";
 import { T } from "@/lib/i18n/pl";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +17,6 @@ export default async function GroupSettingsPage({
   const group = await getGroup(id);
   if (!group) notFound();
 
-  async function togglePause() {
-    "use server";
-    await setGroupPaused(id, !group!.paused);
-  }
   async function saveName(formData: FormData) {
     "use server";
     await updateGroupName(id, formData);
@@ -32,20 +29,7 @@ export default async function GroupSettingsPage({
       <section>
         <div className="eyebrow mb-2">Wysyłka</div>
         <div className="card-paper p-4 space-y-3">
-          <form action={togglePause}>
-            <ActionButton className="btn-row w-full text-left flex items-center justify-between gap-3">
-              <span className="display text-lg">{T.settings.pauseLabel}</span>
-              <span
-                className={
-                  group.paused
-                    ? "rubric text-sm"
-                    : "font-display uppercase tracking-[0.12em] text-sm text-ink-faded"
-                }
-              >
-                {group.paused ? "✓ włączona" : "wyłączona"}
-              </span>
-            </ActionButton>
-          </form>
+          <PauseToggle groupId={group.id} initialPaused={group.paused} />
           <p className="text-sm text-ink-soft italic">
             {T.settings.pauseHelp}
           </p>

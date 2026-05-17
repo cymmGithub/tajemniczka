@@ -336,6 +336,48 @@ body {
     0 2px 5px color-mix(in oklab, var(--color-ink) 26%, transparent);
 }
 
+/* iOS-style pill toggle. Drives off `data-on` so it works in pure-CSS
+   forms or controlled by React state. Marian blue when on, paper-shadow
+   when off — matches the rest of the devotional palette. */
+.pill-switch {
+  position: relative;
+  display: inline-block;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: var(--color-paper-shadow);
+  border: 1px solid color-mix(in oklab, var(--color-ink) 14%, transparent);
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+  flex-shrink: 0;
+}
+.pill-switch[data-on="true"] {
+  background: var(--color-marian);
+  border-color: color-mix(in oklab, var(--color-marian) 70%, var(--color-ink));
+}
+.pill-switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 9999px;
+  background: var(--color-paper);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-ink) 32%, transparent);
+  transform: translateY(-50%);
+  transition: left 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pill-switch[data-on="true"] .pill-switch-thumb {
+  left: calc(100% - 1.125rem - 0.1875rem);
+}
+.pill-switch-sm {
+  width: 2rem;
+  height: 1.125rem;
+}
+.pill-switch-sm .pill-switch-thumb {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 button,
 input,
 select,
