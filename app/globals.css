@@ -378,6 +378,27 @@ body {
   height: 0.875rem;
 }
 
+/* Rectangular gilt frame for non-portrait imagery (landscape/square
+   photos, the parish church on /login, etc.). Same five-layer
+   box-shadow stack as `.portrait-frame`, just with a small
+   border-radius instead of a full pill — box-shadow follows the
+   element's radius so the gilt and matting bands wrap the corners
+   correctly. */
+.gilt-frame {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 70%, var(--color-ink)),
+    0 0 0 5px var(--color-paper-deep),
+    0 0 0 6px color-mix(in oklab, var(--color-gold) 60%, var(--color-ink)),
+    0 0 0 11px var(--color-gold),
+    0 0 0 12px color-mix(in oklab, var(--color-gold) 50%, var(--color-ink)),
+    0 6px 18px -3px color-mix(in oklab, var(--color-ink) 32%, transparent),
+    0 2px 4px color-mix(in oklab, var(--color-ink) 20%, transparent);
+}
+
 button,
 input,
 select,
